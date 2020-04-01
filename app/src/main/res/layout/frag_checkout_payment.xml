@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2020. http://hiteshsahu.com- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ If you use or distribute this project then you MUST ADD A COPY OF LICENCE
+  ~ along with the project.
+  ~  Written by Hitesh Sahu <hiteshkrsahu@Gmail.com>, 2017.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/cash_payment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="50dp"
+        android:background="@drawable/round_background_white"
+        >
+        <TextView
+            android:id="@+id/receipt_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp"
+            android:text="Receipt"
+            ></TextView>
+        <View
+            android:id="@+id/vw_receipt_title"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/color_black"
+            android:layout_below="@+id/receipt_title"
+            android:layout_marginBottom="10dp"></View>
+        <ListView
+            android:id="@+id/receipt_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/vw_receipt_title"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            ></ListView>
+    </RelativeLayout>
+
+</LinearLayout>

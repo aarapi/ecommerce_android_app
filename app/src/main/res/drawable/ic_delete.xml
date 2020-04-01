@@ -1,0 +1,12 @@
+<!--
+  ~ Copyright (c) 2020. http://hiteshsahu.com- All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ If you use or distribute this project then you MUST ADD A COPY OF LICENCE
+  ~ along with the project.
+  ~  Written by Hitesh Sahu <hiteshkrsahu@Gmail.com>, 2017.
+  -->
+
+<vector android:height="24dp" android:viewportHeight="511.992"
+    android:viewportWidth="511.992" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#FF2900" android:pathData="m415.402,495.422 l-159.406,-159.41 -159.406,159.41c-22.098,22.094 -57.922,22.094 -80.02,0 -22.094,-22.098 -22.094,-57.922 0,-80.02l159.41,-159.406 -159.41,-159.406c-22.094,-22.098 -22.094,-57.922 0,-80.02 22.098,-22.094 57.922,-22.094 80.02,0l159.406,159.41 159.406,-159.41c22.098,-22.094 57.922,-22.094 80.02,0 22.094,22.098 22.094,57.922 0,80.02l-159.41,159.406 159.41,159.406c22.094,22.098 22.094,57.922 0,80.02 -22.098,22.094 -57.922,22.094 -80.02,0zM415.402,495.422"/>
+</vector>
