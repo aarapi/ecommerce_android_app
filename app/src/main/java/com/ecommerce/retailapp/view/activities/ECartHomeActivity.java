@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.ecommerce.retailapp.view.fragment.CheckoutPaymentFragmnet;
+import com.ecommerce.retailapp.view.fragment.OrderExecuteBootomFragment;
 import com.ecommerce.retailapp.view.fragment.SettingsFragment;
 import com.example.connectionframework.requestframework.receiver.ReceiverActivity;
 import com.example.connectionframework.requestframework.receiver.ReceiverBridgeInterface;
@@ -71,6 +72,7 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
     private CheckoutPaymentFragmnet checkoutPaymentFragmnet;
     private FrameLayout frag_container;
     private RelativeLayout rl_error_server;
+    private TextView tv_error_message;
     private LinearLayout ll_retry;
 
     private TextView checkOutAmount, itemCountTextView;
@@ -78,6 +80,9 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
     private AVLoadingIndicatorView progressBar;
 
     private NavigationView mNavigationView;
+    private View checkout_button;
+    private View order_button;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +91,11 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
 
         frag_container = findViewById(R.id.frag_container);
         rl_error_server = findViewById(R.id.rl_error_server);
+        tv_error_message = findViewById(R.id.tv_error_message);
         ll_retry = findViewById(R.id.ll_retry);
+        checkout_button = findViewById(R.id.checkout_button);
+        order_button = findViewById(R.id.order_button);
+
 
         ll_retry.setOnClickListener(this);
 
@@ -131,13 +140,16 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
 
 
         if (itemCount != 0) {
+            long amount = 0;
+
             for (Product product : CenterRepository.getCenterRepository()
                     .getListOfProductsInShoppingList()) {
+                amount += Long.valueOf(product.getSellMRP()) * Integer.valueOf(product.getQuantity());
 
-                updateCheckOutAmount(
-                        BigDecimal.valueOf(Long.valueOf(product.getSellMRP())),
-                        true);
             }
+            updateCheckOutAmount(
+                    BigDecimal.valueOf(amount),
+                    true);
         }
 
         findViewById(R.id.item_counter).setOnClickListener(
@@ -468,11 +480,11 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
         bundle.putSerializable(CheckoutPaymentFragmnet.CHECKOUT_DATA,
                 (Serializable) CenterRepository.getCenterRepository().getListOfProductsInShoppingList());
         bundle.putSerializable("TOTAL_AMOUNT", (Serializable) checkOutAmount.getText());
-        checkoutPaymentFragmnet = CheckoutPaymentFragmnet.newInstance(bundle, isCashPayment, this);
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frag_container, checkoutPaymentFragmnet)
-                .addToBackStack(null).commit();
+        OrderExecuteBootomFragment orderExecuteBootomFragment =
+                OrderExecuteBootomFragment.newInstance(bundle, isCashPayment);
+        orderExecuteBootomFragment.show(getSupportFragmentManager(),
+                OrderExecuteBootomFragment.TAG);
     }
 
 
@@ -490,6 +502,18 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
 
     public RelativeLayout getRl_error_server() {
         return rl_error_server;
+    }
+
+    public View getCheckout_button() {
+        return checkout_button;
+    }
+
+    public TextView getTv_error_message() {
+        return tv_error_message;
+    }
+
+    public View getOrder_button() {
+        return order_button;
     }
 
     @Override

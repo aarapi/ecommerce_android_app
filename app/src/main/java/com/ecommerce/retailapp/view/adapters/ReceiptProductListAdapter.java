@@ -60,7 +60,7 @@ public class ReceiptProductListAdapter extends ArrayAdapter<Product> implements 
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.item_product_receipt, parent, false);
 
-            viewHolder.tv_productName = convertView.findViewById(R.id.tv_product_price);
+            viewHolder.tv_productName = convertView.findViewById(R.id.tv_productName);
             viewHolder.tv_product_quantity = convertView.findViewById(R.id.tv_product_quantity);
             viewHolder.tv_product_price = convertView.findViewById(R.id.tv_product_price);
 

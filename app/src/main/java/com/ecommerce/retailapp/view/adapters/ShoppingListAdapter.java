@@ -226,7 +226,9 @@ public class ShoppingListAdapter extends
         ((ECartHomeActivity) context).updateCheckOutAmount(
                 BigDecimal.valueOf(Long.valueOf(CenterRepository
                         .getCenterRepository().getListOfProductsInShoppingList().get(position)
-                        .getSellMRP())), false);
+                        .getSellMRP()) * Integer.valueOf(CenterRepository
+                        .getCenterRepository().getListOfProductsInShoppingList().get(position)
+                        .getQuantity())) , false);
 
         CenterRepository.getCenterRepository().getListOfProductsInShoppingList().remove(position);
 

@@ -8,6 +8,9 @@
         android:id="@+id/tv_productName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/opaque"
+        android:textSize="15sp"
+        android:textStyle="bold"
         android:text="Laptop"></TextView>
 
     <TextView
@@ -16,6 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@+id/tv_multiply"
         android:layout_marginRight="10dp"
+        android:textStyle="bold"
         android:text="3"
         ></TextView>
 
@@ -26,6 +30,8 @@
         android:text="X"
         android:layout_toLeftOf="@+id/tv_product_price"
         android:layout_marginRight="10dp"
+        android:textStyle="bold"
+
         ></TextView>
     <TextView
     android:id="@+id/tv_product_price"
@@ -33,7 +39,9 @@
     android:layout_height="wrap_content"
     android:layout_alignParentEnd="true"
     android:layout_marginRight="20dp"
-    android:text="300"></TextView>
+    android:text="300"
+        android:textStyle="bold"
+        ></TextView>
 
 
 </RelativeLayout>

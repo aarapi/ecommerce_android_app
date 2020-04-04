@@ -3,6 +3,8 @@ package com.ecommerce.retailapp.domain.api;
 
 import android.content.Context;
 import android.os.AsyncTask;
+
+import com.example.connectionframework.requestframework.sender.Repository;
 import com.google.android.material.tabs.TabLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -57,10 +59,6 @@ public class ProductLoaderTask extends AsyncTask<String, Void, Void> {
         if (null != ((ECartHomeActivity) context).getProgressBar())
             ((ECartHomeActivity) context).getProgressBar().setVisibility(
                     View.VISIBLE);
-//        if (null != ((ECartHomeActivity) context).getFrag_container())
-//            ((ECartHomeActivity) context).getFrag_container().setVisibility(
-//                    View.GONE);
-
 
     }
 
@@ -75,9 +73,11 @@ public class ProductLoaderTask extends AsyncTask<String, Void, Void> {
         if(CenterRepository.getCenterRepository().getMapOfProductsInCategory() != null) {
             setUpUi();
         }else {
-            if (null != ((ECartHomeActivity) context).getRl_error_server())
+            if (null != ((ECartHomeActivity) context).getRl_error_server()) {
+                ((ECartHomeActivity) context).getTv_error_message().setText(Repository.newInstance().getMessageError());
                 ((ECartHomeActivity) context).getRl_error_server().setVisibility(
                         View.VISIBLE);
+            }
         }
 
 
@@ -85,13 +85,6 @@ public class ProductLoaderTask extends AsyncTask<String, Void, Void> {
 
     @Override
     protected Void doInBackground(String... params) {
-
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
 
         if (CenterRepository.getCenterRepository().getMapOfProductsInCategory().size() == 0
                 || !categoryName.equals(CenterRepository.getCenterRepository()

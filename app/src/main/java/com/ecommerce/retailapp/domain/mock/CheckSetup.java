@@ -17,12 +17,7 @@ public class CheckSetup {
     public static class ServerActions {
         public static int ECOMMERCE_GET_CATEGORIES = 0;
         public static int ECOMMERCE_GET_ALL_PRODUCTS_OF_CATEGORY = 1;
-        public static int ANNOYING_PROJECTS_DASHBOARD_ACTIVITY = 2;
-        public static int ANNOYING_PROJECTS_PERSONAL_DATA = 3;
-        public static int ANNOYING_PROJECTS_HOME_DATA = 4;
-        public static int ANNOYING_PROJECTS_SEARCH = 5;
-        public static int ANNOYING_PROJECTS_USER_PROFILE = 6;
-        public static int ANNOYING_PROJECTS_CREATE_NEW_POST = 7;
+        public static int ECOMMERCE_MAKE_AN_ORDER = 2;
     }
 
     public static class Activities {

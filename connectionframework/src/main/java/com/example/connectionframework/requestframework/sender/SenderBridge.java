@@ -45,6 +45,10 @@ public class SenderBridge {
             }
         }finally {
             Message message = returnMessage(jsonResponse);
+            if (message.getData().size() == 0){
+                Repository.newInstance().setMessageError("No data found");
+                return null;
+            }
 
             return message.getData();
         }
@@ -53,24 +57,14 @@ public class SenderBridge {
 
     private Message returnMessage(String response){
         Message message = new Message();
-        CustomAlertBox customAlertBox;
-
-
-        SmartDialogClickListener smartDialogClickListener = new SmartDialogClickListener() {
-            @Override
-            public void onClick(SmartDialog smartDialog) {
-                smartDialog.dismiss();
-            }
-        };
-
-
 
         if(response.equals(Constants.Application.CONNECTION_TIMED_OUT_ERROR_MESSAGE)){
 
             message.setStatusCode(MessagingFrameworkConstant.STATUS_CODES.ConnectionTimedOut);
-
+            Repository.newInstance().setMessageError(response);
         }else if(response.equals(Constants.Application.CONNECTION_OTHER_EXCEPTION)){
             message.setStatusCode(MessagingFrameworkConstant.STATUS_CODES.ConnectionFailed);
+            Repository.newInstance().setMessageError(response);
         }
         else {
             message = JsonWrapper.getobject(response);

@@ -9,6 +9,7 @@
 package com.ecommerce.retailapp.domain.mock;
 
 
+import com.ecommerce.retailapp.model.entities.Product;
 import com.example.connectionframework.requestframework.sender.Request;
 import com.example.connectionframework.requestframework.sender.RequestFunctions;
 
@@ -28,29 +29,14 @@ public class RequestFunction {
         return RequestFunctions.createRequest(CheckSetup.ServerActions.ECOMMERCE_GET_ALL_PRODUCTS_OF_CATEGORY, params);
     }
 
-    public static Request getPostData(int activityId){
+    public static Request makeAnOrder(List<Product> productList, String... userInfo){
         List<Object> params = new ArrayList<>();
-        return RequestFunctions.createRequest(activityId, CheckSetup.ServerActions.ANNOYING_PROJECTS_HOME_DATA, params);
-    }
-    public static Request getUserProfileData(int activityId){
-        List<Object> params = new ArrayList<>();
-        return RequestFunctions.createRequest(activityId, CheckSetup.ServerActions.ANNOYING_PROJECTS_USER_PROFILE, params);
+        params.add(productList);
+        params.add(userInfo);
+
+        return RequestFunctions.createRequest(CheckSetup.ServerActions.ECOMMERCE_MAKE_AN_ORDER, params);
     }
 
-    public static Request getDashboardData(int activityId) {
-        List<Object> params = new ArrayList<>();
-        return RequestFunctions.createRequest(activityId, CheckSetup.ServerActions.ANNOYING_PROJECTS_DASHBOARD_ACTIVITY, params);
-    }
 
-    public static Request getPersonalData(int activityId) {
-        List<Object> params = new ArrayList<>();
-        return RequestFunctions.createRequest(activityId, CheckSetup.ServerActions.ANNOYING_PROJECTS_DASHBOARD_ACTIVITY, params);
-    }
 
-    public static Request createNewPost(int activityId, List<String> postData){
-        List<Object> params = new ArrayList<>();
-        params.add(postData);
-        return RequestFunctions.createRequest(activityId, CheckSetup.ServerActions.ANNOYING_PROJECTS_CREATE_NEW_POST, params);
-
-    }
 }

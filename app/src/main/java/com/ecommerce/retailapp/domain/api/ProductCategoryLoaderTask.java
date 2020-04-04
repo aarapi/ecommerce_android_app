@@ -15,6 +15,7 @@ import com.ecommerce.retailapp.view.activities.ECartHomeActivity;
 import com.ecommerce.retailapp.view.adapters.CategoryListAdapter;
 import com.ecommerce.retailapp.view.adapters.CategoryListAdapter.OnItemClickListener;
 import com.ecommerce.retailapp.view.fragment.ProductOverviewFragment;
+import com.example.connectionframework.requestframework.sender.Repository;
 
 /**
  * The Class ImageLoaderTask.
@@ -75,21 +76,17 @@ public class ProductCategoryLoaderTask extends AsyncTask<String, Void, Void> {
                         });
             }
         }else {
-            if (null != ((ECartHomeActivity) context).getRl_error_server())
+            if (null != ((ECartHomeActivity) context).getRl_error_server()) {
+                ((ECartHomeActivity) context).getTv_error_message().setText(Repository.newInstance().getMessageError());
                 ((ECartHomeActivity) context).getRl_error_server().setVisibility(
                         View.VISIBLE);
+            }
         }
 
     }
 
     @Override
     protected Void doInBackground(String... params) {
-
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
 
         if(CenterRepository.getCenterRepository().getListOfCategory().size() == 0) {
             FakeWebServer.getFakeWebServer().addCategory(context);

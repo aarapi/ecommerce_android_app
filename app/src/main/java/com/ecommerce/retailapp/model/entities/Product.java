@@ -11,12 +11,10 @@
  */
 package com.ecommerce.retailapp.model.entities;
 
-/**
- * The Class Product used as model for Products.
- *
- * @author Hitesh
- */
-public class Product {
+import com.ecommerce.retailapp.json.BaseJsonModel;
+
+
+public class Product extends BaseJsonModel {
 
 
     /**
@@ -84,6 +82,8 @@ public class Product {
         this.imageUrl = imageURL;
         this.productId = orderId;
     }
+
+    public String __type = getClass().getSimpleName();
 
     public String getProductId() {
         return productId;
