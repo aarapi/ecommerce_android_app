@@ -10,6 +10,7 @@ package com.ecommerce.retailapp.model;
 
 import com.ecommerce.retailapp.model.entities.Product;
 import com.ecommerce.retailapp.model.entities.ProductCategoryModel;
+import com.ecommerce.retailapp.model.entities.ShopModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,6 +27,8 @@ public class CenterRepository {
     private ArrayList<ProductCategoryModel> listOfCategory = new ArrayList<ProductCategoryModel>();
     private ConcurrentHashMap<String, ArrayList<Product>> mapOfProductsInCategory = new ConcurrentHashMap<String, ArrayList<Product>>();
     private List<Product> listOfProductsInShoppingList = Collections.synchronizedList(new ArrayList<Product>());
+    private ArrayList<ShopModel> listOfShop = new ArrayList<>();
+    private List<Product> listOfSearchedProducts = new ArrayList<>();
     private List<Set<String>> listOfItemSetsForDataMining = new ArrayList<>();
 
     public static CenterRepository getCenterRepository() {
@@ -36,6 +39,13 @@ public class CenterRepository {
         return centerRepository;
     }
 
+    public ArrayList<ShopModel> getListOfShop() {
+        return listOfShop;
+    }
+
+    public void setListOfShop(ArrayList<ShopModel> listOfShop) {
+        this.listOfShop = listOfShop;
+    }
 
     public List<Product> getListOfProductsInShoppingList() {
         return listOfProductsInShoppingList;
@@ -72,4 +82,11 @@ public class CenterRepository {
         listOfItemSetsForDataMining.add(list);
     }
 
+    public List<Product> getListOfSearchedProducts() {
+        return listOfSearchedProducts;
+    }
+
+    public void setListOfSearchedProducts(List<Product> listOfSearchedProducts) {
+        this.listOfSearchedProducts = listOfSearchedProducts;
+    }
 }

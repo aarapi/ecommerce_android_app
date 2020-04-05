@@ -59,6 +59,8 @@ public class Product extends BaseJsonModel {
 
     private String productId = "";
 
+    private String shopName;
+
     /**
      * @param itemName
      * @param itemShortDesc

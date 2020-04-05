@@ -75,6 +75,14 @@ public class ProductListAdapter extends
 
         this.context = context;
     }
+    public ProductListAdapter(Context context) {
+
+
+            productList = CenterRepository.getCenterRepository().getListOfSearchedProducts();
+
+
+        this.context = context;
+    }
 
     @Override
     public VersionViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {

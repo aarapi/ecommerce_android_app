@@ -19,9 +19,20 @@ import java.util.List;
 public class RequestFunction {
 
 
+
     public static Request getCategories(){
         List<Object> params = new ArrayList<>();
         return RequestFunctions.createRequest(CheckSetup.ServerActions.ECOMMERCE_GET_CATEGORIES, params);
+    }
+    public static Request getShopList(String categoryName){
+        List<Object> params = new ArrayList<>();
+        params.add(categoryName);
+        return RequestFunctions.createRequest(CheckSetup.ServerActions.ECOMMERCE_LIST_OF_SHOPS, params);
+    }
+    public static Request getSearchedProducts(String searchString){
+        List<Object> params = new ArrayList<>();
+        params.add(searchString);
+        return RequestFunctions.createRequest(CheckSetup.ServerActions.ECOMMERCE_LIST_OF_SEARCHED_PRODUCTS, params);
     }
     public static Request getProductsOfCategory(String categoryName){
         List<Object> params = new ArrayList<>();

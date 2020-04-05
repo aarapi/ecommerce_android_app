@@ -25,6 +25,7 @@ import com.ecommerce.retailapp.view.fragment.HomeFragment;
 import com.ecommerce.retailapp.view.fragment.MyCartFragment;
 import com.ecommerce.retailapp.view.fragment.ProductOverviewFragment;
 import com.ecommerce.retailapp.view.fragment.SettingsFragment;
+import com.ecommerce.retailapp.view.fragment.ShopListFragment;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,6 +41,7 @@ public class Utils {
     public static final String MY_CART_FRAGMENT = "MyCartFragment";
     public static final String MY_ORDERS_FRAGMENT = "MYOrdersFragment";
     public static final String HOME_FRAGMENT = "HomeFragment";
+    public static final String SHOP_FRAGMENT = "ShopFragment";
     public static final String SEARCH_FRAGMENT_TAG = "SearchFragment";
     public static final String SETTINGS_FRAGMENT_TAG = "SettingsFragment";
     public static final String OTP_LOGIN_TAG = "OTPLogingFragment";
@@ -344,6 +346,8 @@ public class Utils {
                     fragmentToReplace = new ProductOverviewFragment();
                 } else if (TAG.equals(SHOPPING_LIST_TAG)) {
                     fragmentToReplace = new MyCartFragment();
+                }else if (TAG.equals(SHOP_FRAGMENT)){
+                    fragmentToReplace = new ShopListFragment();
                 }
 
             } else
@@ -359,6 +363,8 @@ public class Utils {
                     fragmentToReplace = (SettingsFragment) fragment;
                 } else if (TAG.equals(CONTACT_US_FRAGMENT)) {
                     fragmentToReplace = (ContactUsFragment) fragment;
+                }else if (TAG.equals(SHOP_FRAGMENT)) {
+                    fragmentToReplace = (ShopListFragment) fragment;
                 }
             }
 

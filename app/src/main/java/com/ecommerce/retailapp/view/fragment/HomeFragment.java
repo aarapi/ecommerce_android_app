@@ -46,6 +46,7 @@ public class HomeFragment extends Fragment {
         }
     };
     private Handler mHandler = new Handler();
+    private SearchProductFragment searchFragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,10 +60,9 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                        Utils.switchFragmentWithAnimation(R.id.frag_container,
-                                new SearchProductFragment(),
-                                ((ECartHomeActivity) getActivity()), null,
-                                AnimationType.SLIDE_UP);
+                        searchFragment = new SearchProductFragment(getContext());
+                        searchFragment.show(getFragmentManager(),
+                                OrderExecuteBootomFragment.TAG);
 
                     }
                 });
@@ -112,34 +112,6 @@ public class HomeFragment extends Fragment {
             new ProductCategoryLoaderTask(recyclerView, getActivity()).execute();
 
 
-//
-//		if (simpleRecyclerAdapter == null) {
-//			simpleRecyclerAdapter = new CategoryListAdapter(getActivity());
-//			recyclerView.setAdapter(simpleRecyclerAdapter);
-//
-//			simpleRecyclerAdapter
-//					.SetOnItemClickListener(new OnItemClickListener() {
-//
-//						@Override
-//						public void onItemClick(View view, int position) {
-//
-//							if (position == 0) {
-//								CenterRepository.getCenterRepository()
-//										.getAllElectronics();
-//							} else if (position == 1) {
-//								CenterRepository.getCenterRepository()
-//										.getAllProductsOfCategory();
-//							}
-//							Utils.switchFragmentWithAnimation(
-//									R.id.frag_container,
-//									new ProductOverviewFragment(),
-//									((ECartHomeActivity) getActivity()), null,
-//									AnimationType.SLIDE_LEFT);
-//
-//						}
-//					});
-//		}
-
         view.setFocusableInTouchMode(true);
         view.requestFocus();
         view.setOnKeyListener(new View.OnKeyListener() {
@@ -178,4 +150,7 @@ public class HomeFragment extends Fragment {
 
     }
 
+    public SearchProductFragment getSearchFragment() {
+        return searchFragment;
+    }
 }

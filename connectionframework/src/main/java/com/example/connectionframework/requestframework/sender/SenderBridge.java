@@ -43,12 +43,12 @@ public class SenderBridge {
             }else if (e.getMessage() != null && e.getMessage().equals(Constants.Application.CONNECTION_OTHER_EXCEPTION)){
                 jsonResponse = Constants.Application.CONNECTION_OTHER_EXCEPTION;
             }
+            Repository.newInstance().setMessageError(jsonResponse);
+            return null;
         }finally {
             Message message = returnMessage(jsonResponse);
-            if (message.getData().size() == 0){
-                Repository.newInstance().setMessageError("No data found");
-                return null;
-            }
+
+
 
             return message.getData();
         }
@@ -59,7 +59,6 @@ public class SenderBridge {
         Message message = new Message();
 
         if(response.equals(Constants.Application.CONNECTION_TIMED_OUT_ERROR_MESSAGE)){
-
             message.setStatusCode(MessagingFrameworkConstant.STATUS_CODES.ConnectionTimedOut);
             Repository.newInstance().setMessageError(response);
         }else if(response.equals(Constants.Application.CONNECTION_OTHER_EXCEPTION)){
@@ -68,6 +67,13 @@ public class SenderBridge {
         }
         else {
             message = JsonWrapper.getobject(response);
+        }
+
+        if (message.getData() != null) {
+            if (message.getData().size() == 0) {
+                Repository.newInstance().setMessageError("No Products found");
+                message.setData(null);
+            }
         }
 
         return message;
@@ -81,7 +87,7 @@ public class SenderBridge {
             public void onDataReceive(String jsonrRsponse) {
                 ReceiverActivity receiverBridgeInterfaceActivity = (ReceiverActivity) context;
                 Message message = returnMessage(jsonrRsponse);
-                receiverBridgeInterfaceActivity.onDataReceive(message.getData());
+                receiverBridgeInterfaceActivity.onDataReceive(message.getAction(),message.getData());
             }
         };
         SendRequest sendRequest = new SendRequest(urlConnection, receiverBridgeInterface);

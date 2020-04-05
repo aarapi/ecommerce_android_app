@@ -40,6 +40,8 @@ public class ProductListFragment extends Fragment {
         this.subcategoryKey = subcategoryKey;
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -110,16 +112,11 @@ public class ProductListFragment extends Fragment {
                 if (event.getAction() == KeyEvent.ACTION_UP
                         && keyCode == KeyEvent.KEYCODE_BACK) {
 
-//					Utils.switchContent(R.id.top_container,
-//							Utils.HOME_FRAGMENT,
-//							((ECartHomeActivity) (getContext())),
-//							AnimationType.SLIDE_UP);
 
-                    Utils.switchFragmentWithAnimation(
-                            R.id.frag_container,
-                            new HomeFragment(),
-                            ((ECartHomeActivity) (getContext())), Utils.HOME_FRAGMENT,
-                            AnimationType.SLIDE_UP);
+                    Utils.switchContent(R.id.frag_container,
+                            Utils.SHOP_FRAGMENT,
+                            ((ECartHomeActivity) (getContext())),
+                            AnimationType.SLIDE_RIGHT);
 
                 }
                 return true;

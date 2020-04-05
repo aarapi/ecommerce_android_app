@@ -10,6 +10,7 @@ package com.ecommerce.retailapp.domain.mock;
 
 import android.content.Context;
 
+import com.ecommerce.retailapp.model.entities.ShopModel;
 import com.example.connectionframework.requestframework.sender.SenderBridge;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -41,6 +42,21 @@ public class FakeWebServer {
     }
 
 
+    public void addShop(String categoryName, Context context){
+        Type founderListType = new TypeToken<ArrayList<ShopModel>>(){}.getType();
+        senderBridge = new SenderBridge(context);
+
+        data = senderBridge.sendMessage(RequestFunction.getShopList(categoryName));
+
+        if (data !=null) {
+            ArrayList<ShopModel> productCategoryModels = gson.fromJson(gson.toJson(data.get(0)),
+                    founderListType);
+            CenterRepository.getCenterRepository().setListOfShop(productCategoryModels);
+        }else
+            CenterRepository.getCenterRepository().setListOfShop(null);
+    }
+
+
     public void addCategory(Context context) {
 
         Type founderListType = new TypeToken<ArrayList<ProductCategoryModel>>(){}.getType();
@@ -57,17 +73,19 @@ public class FakeWebServer {
     }
 
 
-    public void getAllProductsOfCategory(String categoryName, Context context) {
+
+    public void getAllProductsOfCategory(String shopName, Context context) {
         Type founderListType = new TypeToken<ConcurrentHashMap<String, ArrayList<Product>>>(){}.getType();
 
         ConcurrentHashMap<String, ArrayList<Product>> productMap =
                 new ConcurrentHashMap<String, ArrayList<Product>>();
         senderBridge = new SenderBridge(context);
-        data = senderBridge.sendMessage(RequestFunction.getProductsOfCategory(categoryName));
+        data = senderBridge.sendMessage(RequestFunction.getProductsOfCategory(shopName));
 
         if (data != null) {
             productMap = gson.fromJson(gson.toJson(data.get(0)), founderListType);
 
+            CenterRepository.getCenterRepository().setListOfSearchedProducts(productMap.get("Detergjente"));
 
             CenterRepository.getCenterRepository().setMapOfProductsInCategory(productMap);
         }else
@@ -76,12 +94,20 @@ public class FakeWebServer {
     }
 
     public void getAllProducts(int productCategory, Context context) {
-        String categoryName = CenterRepository.getCenterRepository()
-                                .getListOfCategory()
-                                 .get(productCategory).categoryName;
+        String shopName = CenterRepository.getCenterRepository()
+                                .getListOfShop()
+                                 .get(productCategory).getShopName();
 
-            getAllProductsOfCategory(categoryName, context);
+            getAllProductsOfCategory(shopName, context);
 
     }
+    public void getAllShopList(int productCategory, Context context) {
+        String categoryName = CenterRepository.getCenterRepository()
+                .getListOfCategory().get(productCategory).categoryName;
+
+        addShop(categoryName, context);
+
+    }
+
 
 }

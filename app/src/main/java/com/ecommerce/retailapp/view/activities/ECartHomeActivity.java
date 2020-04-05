@@ -10,16 +10,20 @@ package com.ecommerce.retailapp.view.activities;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 
+import com.ecommerce.retailapp.domain.mock.CheckSetup;
 import com.ecommerce.retailapp.view.fragment.CheckoutPaymentFragmnet;
 import com.ecommerce.retailapp.view.fragment.OrderExecuteBootomFragment;
-import com.ecommerce.retailapp.view.fragment.SettingsFragment;
 import com.example.connectionframework.requestframework.receiver.ReceiverActivity;
-import com.example.connectionframework.requestframework.receiver.ReceiverBridgeInterface;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
+
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -60,6 +64,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
+
 public class ECartHomeActivity extends AppCompatActivity implements ReceiverActivity, OnClickListener {
 
     public static final double MINIMUM_SUPPORT = 0.1;
@@ -74,6 +81,7 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
     private RelativeLayout rl_error_server;
     private TextView tv_error_message;
     private LinearLayout ll_retry;
+    private  OrderExecuteBootomFragment orderExecuteBootomFragment;
 
     private TextView checkOutAmount, itemCountTextView;
     private TextView offerBanner;
@@ -82,6 +90,7 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
     private NavigationView mNavigationView;
     private View checkout_button;
     private View order_button;
+    private HomeFragment homeFragment;
 
 
     @Override
@@ -179,8 +188,10 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
                     }
                 });
 
+        homeFragment = new HomeFragment();
+
         Utils.switchFragmentWithAnimation(R.id.frag_container,
-                new HomeFragment(), this, Utils.HOME_FRAGMENT,
+                homeFragment, this, Utils.HOME_FRAGMENT,
                 AnimationType.SLIDE_UP);
 
         toggleBannerVisibility();
@@ -356,44 +367,7 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
         return checkoutAmount;
     }
 
-	/*
-     * Makes fake Volley request by adding request in fake Volley Queue and
-	 * return mock JSON String plese visit
-	 * com.ecommerce.retailapp.domain.mock.FakeHttpStack and
-	 * FakeRequestQueue queu
-	 */
-//	private void makeFakeVolleyJsonArrayRequest() {
-//
-//		JsonArrayRequest req = new JsonArrayRequest(
-//				NetworkConstants.URL_GET_ALL_CATEGORY,
-//				new Response.Listener<JSONArray>() {
-//					@Override
-//					public void onResponse(JSONArray response) {
-//						Log.d(TAG,
-//
-//						response.toString());
-//
-////						Toast.makeText(getApplicationContext(),
-////								"Volley Fake response", Toast.LENGTH_SHORT)
-////								.show();
-//
-//						// hidepDialog();
-//					}
-//				}, new Response.ErrorListener() {
-//					@Override
-//					public void onErrorResponse(VolleyError error) {
-//						VolleyLog.d(TAG, "Error: " + error.getMessage());
-//
-//						Log.e(TAG,
-//								"------------------------" + error.getMessage());
-////						Toast.makeText(getApplicationContext(),
-////								error.getMessage(), Toast.LENGTH_SHORT).show();
-//					}
-//				});
-//
-//		// Adding request to request queue
-//		AppController.getInstance().addToFakeRequestQueue(req);
-//	}
+
 
     /*
      * Get Number of items in cart
@@ -481,8 +455,8 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
                 (Serializable) CenterRepository.getCenterRepository().getListOfProductsInShoppingList());
         bundle.putSerializable("TOTAL_AMOUNT", (Serializable) checkOutAmount.getText());
 
-        OrderExecuteBootomFragment orderExecuteBootomFragment =
-                OrderExecuteBootomFragment.newInstance(bundle, isCashPayment);
+         orderExecuteBootomFragment =
+                OrderExecuteBootomFragment.newInstance(bundle, this, isCashPayment);
         orderExecuteBootomFragment.show(getSupportFragmentManager(),
                 OrderExecuteBootomFragment.TAG);
     }
@@ -512,12 +486,40 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
         return tv_error_message;
     }
 
+
     public View getOrder_button() {
         return order_button;
     }
 
     @Override
-    public void onDataReceive(List<Object> data) {
+    public void onDataReceive(int action, final List<Object> data) {
+        if (action == CheckSetup.ServerActions.ECOMMERCE_MAKE_AN_ORDER) {
+            final Bitmap bitmap = getBitmapFromVectorDrawable(R.drawable.ic_check);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    clearOrderList();
+                    orderExecuteBootomFragment.dismiss();
+                    orderExecuteBootomFragment.getpDialog().setTitleText(((String) data.get(0)))
+                            .setConfirmText("OK")
+                            .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+
+                    CenterRepository.getCenterRepository().setListOfProductsInShoppingList(new ArrayList<Product>());
+                }
+            });
+        }else if (action == CheckSetup.ServerActions.ECOMMERCE_LIST_OF_SEARCHED_PRODUCTS){
+            HomeFragment homeFragment = null;
+            for (int i =0 ; i<getSupportFragmentManager().getFragments().size(); i++ ){
+                try {
+                    homeFragment = (HomeFragment) getSupportFragmentManager().getFragments().get(i);
+                }catch (Exception e){
+                    continue;
+                }
+            }
+            homeFragment.getSearchFragment().onDataReceive(data);
+        }
+
+
 
     }
 
@@ -531,5 +533,20 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
                     .commit();
             rl_error_server.setVisibility(View.GONE);
         }
+    }
+
+    public  Bitmap getBitmapFromVectorDrawable(int drawableId) {
+        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), drawableId);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            drawable = (DrawableCompat.wrap(drawable)).mutate();
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
+                drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
     }
 }

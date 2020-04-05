@@ -11,6 +11,7 @@ public class AppConstants {
     // Help Preference
     public static final String SUBMIT_LOGS = "CrashLogs";
     public static int CURRENT_CATEGORY = 0;
+    public static int CURRENT_SHOP = 0;
 
 
 }

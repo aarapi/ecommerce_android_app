@@ -9,10 +9,12 @@
 package com.ecommerce.retailapp.view.fragment;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,11 +25,14 @@ import androidx.annotation.Nullable;
 import com.ecommerce.retailapp.R;
 import com.ecommerce.retailapp.domain.mock.RequestFunction;
 import com.ecommerce.retailapp.model.entities.Product;
+import com.ecommerce.retailapp.view.activities.ECartHomeActivity;
 import com.ecommerce.retailapp.view.adapters.ReceiptProductListAdapter;
 import com.example.connectionframework.requestframework.sender.SenderBridge;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.List;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 import static com.ecommerce.retailapp.view.fragment.CheckoutPaymentFragmnet.CHECKOUT_DATA;
 
@@ -35,20 +40,23 @@ public class OrderExecuteBootomFragment extends BottomSheetDialogFragment
         implements View.OnClickListener {
     public static final String TAG = "ActionBottomDialog";
     private ItemClickListener mListener;
-    private TextView order_button;
+    private Button order_button;
     private List<Product> productList;
     private String cashOutAmount;
     private EditText et_location, et_name, et_phone;
     private ListView receiptListView;
     private TextView total_amount;
     private static boolean isCashPayment;
+    private static ECartHomeActivity eCartHomeActivity;
+    private SweetAlertDialog pDialog;
 
 
 
-    public static OrderExecuteBootomFragment newInstance(Bundle args, boolean isCashPaymentArg) {
+    public static OrderExecuteBootomFragment newInstance(Bundle args,ECartHomeActivity eCartHomeActivityArg, boolean isCashPaymentArg) {
         OrderExecuteBootomFragment orderExecuteBootomFragment = new OrderExecuteBootomFragment();
         orderExecuteBootomFragment.setArguments(args);
         isCashPayment = isCashPaymentArg;
+        eCartHomeActivity = eCartHomeActivityArg;
         return orderExecuteBootomFragment;
     }
     @Nullable
@@ -94,9 +102,14 @@ public class OrderExecuteBootomFragment extends BottomSheetDialogFragment
         if (view == order_button){
             String[] inputValue = {et_location.getText().toString(), et_name.getText().toString(), et_phone.getText().toString()};
             if (validateInput(inputValue)){
+                 pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
+                pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+                pDialog.setTitleText("Loading");
+                pDialog.setCancelable(false);
+                pDialog.show();
+
                 SenderBridge senderBridge = new SenderBridge(getContext());
                 senderBridge.sendMessageAssync(RequestFunction.makeAnOrder(productList,inputValue), getContext());
-
             }
         }
 
@@ -112,9 +125,16 @@ public class OrderExecuteBootomFragment extends BottomSheetDialogFragment
 
         total_amount.setText(cashOutAmount);
 
-        //((ECartHomeActivity) contextEc).clearOrderList();
+
     }
 
+    public Button getOrder_button() {
+        return order_button;
+    }
+
+    public SweetAlertDialog getpDialog() {
+        return pDialog;
+    }
 
     public boolean validateInput(String ... inputValue) {
 
@@ -136,4 +156,5 @@ public class OrderExecuteBootomFragment extends BottomSheetDialogFragment
 
         return true;
     }
+
 }

@@ -8,11 +8,16 @@
 
 package com.ecommerce.retailapp.view.fragment;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -23,40 +28,51 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ecommerce.retailapp.R;
+import com.ecommerce.retailapp.domain.mock.RequestFunction;
+import com.ecommerce.retailapp.model.CenterRepository;
 import com.ecommerce.retailapp.model.entities.Product;
 import com.ecommerce.retailapp.utils.Utils;
 import com.ecommerce.retailapp.utils.Utils.AnimationType;
 import com.ecommerce.retailapp.view.activities.ECartHomeActivity;
+import com.ecommerce.retailapp.view.adapters.ProductListAdapter;
+import com.example.connectionframework.requestframework.sender.Repository;
+import com.example.connectionframework.requestframework.sender.SenderBridge;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.wang.avi.AVLoadingIndicatorView;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ConcurrentHashMap;
 
-public class SearchProductFragment extends Fragment {
+public class SearchProductFragment extends BottomSheetDialogFragment {
 
     private static final int REQ_SCAN_RESULT = 200;
     private final int REQ_CODE_SPEECH_INPUT = 100;
     ArrayList<Product> searchProductList = new ArrayList<>();
     boolean searchInProgress = false;
     private TextView heading;
-    private ImageButton btnSpeak;
+    private ImageButton btnSearch;
     private EditText serchInput;
-    private ListView serachListView;
+    private RecyclerView recyclerView;
+    private AVLoadingIndicatorView loading_bar;
+    private Context context;
+    private RelativeLayout rl_error_server;
+    private TextView tv_error_message;
 
-    /** The search adapter. */
-    // private SearchListArrayAdapter searchAdapter;
-    /**
-     * The root view.
-     */
+
     private View rootView;
 
-    public static Fragment newInstance() {
-        // TODO Auto-generated method stub
-        return new SearchProductFragment();
+    public  SearchProductFragment (Context context) {
+        this.context = context;
     }
 
     @Override
@@ -66,56 +82,39 @@ public class SearchProductFragment extends Fragment {
         rootView = inflater.inflate(R.layout.frag_search_product,
                 container, false);
 
-        btnSpeak = (ImageButton) rootView.findViewById(R.id.btnSpeak);
+        rl_error_server = rootView.findViewById(R.id.rl_error_server);
+        tv_error_message = rootView.findViewById(R.id.tv_error_message);
+
+        btnSearch = (ImageButton) rootView.findViewById(R.id.btn_search);
 
         heading = (TextView) rootView.findViewById(R.id.txtSpeech_heading);
+        loading_bar = rootView.findViewById(R.id.loading_bar);
 
         serchInput = (EditText) rootView.findViewById(R.id.edt_search_input);
 
         serchInput.setSelected(true);
 
-        serachListView = (ListView) rootView
-                .findViewById(R.id.search_list_view);
+        recyclerView = (RecyclerView) rootView
+                .findViewById(R.id.product_list_recycler_view);
 
-        serachListView.setOnItemClickListener(new OnItemClickListener() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
+                getActivity().getBaseContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setHasFixedSize(true);
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
 
-                Toast.makeText(getActivity(), "Selected" + position, 500)
-                        .show();
-
-            }
-        });
-
-        serchInput.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence inputString, int arg1,
-                                      int arg2, int arg3) {
-
-                heading.setText("Showing results for "
-                        + inputString.toString().toLowerCase());
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1,
-                                          int arg2, int arg3) {
-
-                heading.setText("Search Products");
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-            }
-        });
-        btnSpeak.setOnClickListener(new View.OnClickListener() {
+        btnSearch.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                promptSpeechInput();
+               recyclerView.setVisibility(View.GONE);
+                rl_error_server.setVisibility(View.GONE);
+               loading_bar.setVisibility(View.VISIBLE);
+                SenderBridge senderBridge = new SenderBridge(getContext());
+
+                senderBridge.sendMessageAssync
+                        (RequestFunction.getSearchedProducts
+                                (serchInput.getText().toString()), getContext());
             }
         });
 
@@ -141,64 +140,40 @@ public class SearchProductFragment extends Fragment {
 
     }
 
-    /**
-     * Showing google speech input dialog.
-     */
-    private void promptSpeechInput() {
-        searchInProgress = true;
-        searchProductList.clear();
 
-        heading.setText("Search Products");
 
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "What do you wish for");
-        try {
-            startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
-        } catch (ActivityNotFoundException a) {
-            Toast.makeText(getActivity(),
-                    "Voice search not supported by your device ",
-                    Toast.LENGTH_SHORT).show();
-        }
-    }
+    public void onDataReceive(List<Object> data){
 
-    /**
-     * Receiving speech input.
-     *
-     * @param requestCode the request code
-     * @param resultCode  the result code
-     * @param data        the data
-     */
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        Type founderListType = new TypeToken<ArrayList<Product>>(){}.getType();
+        Gson gson = new Gson();
+        if (data != null) {
+            ArrayList<Product> products = gson.fromJson(gson.toJson(data.get(0)), founderListType);
+            CenterRepository.getCenterRepository().setListOfSearchedProducts(products);
+        }else
+            CenterRepository.getCenterRepository().setListOfSearchedProducts(null);
 
-        searchInProgress = false;
 
-        if (resultCode == getActivity().RESULT_OK && null != data) {
-            switch (requestCode) {
-                case REQ_CODE_SPEECH_INPUT: {
 
-                    ArrayList<String> result = data
-                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+        ((Activity) context).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                loading_bar.setVisibility(View.GONE);
+                if (CenterRepository.getCenterRepository().getListOfSearchedProducts() != null) {
+                    ProductListAdapter adapter = new ProductListAdapter(getContext());
+                    recyclerView.setAdapter(adapter);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    adapter.SetOnItemClickListener(new ProductListAdapter.OnItemClickListener() {
 
-                    heading.setText("Showing Results for " + result.get(0));
-
-                    break;
+                        @Override
+                        public void onItemClick(View view, int position) {
+                        }
+                    });
+                }else {
+                    rl_error_server.setVisibility(View.VISIBLE);
+                    tv_error_message.setText(Repository.newInstance().getMessageError());
                 }
-
-                case REQ_SCAN_RESULT:
-                    //
-                    // String contents = data.getStringExtra("SCAN_RESULT");
-                    // String format = data.getStringExtra("SCAN_RESULT_FORMAT");
-                    // Toast.makeText(getActivity(), "Scan Success", 1000).show();
-                    break;
-
             }
-
-        }
+        });
 
     }
 

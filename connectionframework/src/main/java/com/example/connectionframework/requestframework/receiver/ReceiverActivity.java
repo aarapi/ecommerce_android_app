@@ -13,5 +13,5 @@ import java.util.List;
 
 public interface ReceiverActivity {
 
-    public void onDataReceive(List<Object> data);
+    public void onDataReceive(int action, List<Object> data);
 }

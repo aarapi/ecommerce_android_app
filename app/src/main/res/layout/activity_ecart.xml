@@ -22,7 +22,7 @@
             android:id="@+id/frag_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/control_overview"></FrameLayout>
+            android:layout_above="@+id/checkout_button"></FrameLayout>
 
         <RelativeLayout
             android:id="@+id/rl_error_server"

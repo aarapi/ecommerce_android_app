@@ -6,4 +6,4 @@
  *  Written by Hitesh Sahu <hiteshkrsahu@Gmail.com>, 2017.
  */
 
-include ':app', ':connectionframework'
+include ':app', ':connectionframework', ':library'

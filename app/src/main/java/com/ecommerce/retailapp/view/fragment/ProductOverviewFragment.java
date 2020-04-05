@@ -101,7 +101,7 @@ public class ProductOverviewFragment extends Fragment {
                         && keyCode == KeyEvent.KEYCODE_BACK) {
 
                     Utils.switchContent(R.id.frag_container,
-                            Utils.HOME_FRAGMENT,
+                            Utils.SHOP_FRAGMENT,
                             ((ECartHomeActivity) (getContext())),
                             AnimationType.SLIDE_RIGHT);
 

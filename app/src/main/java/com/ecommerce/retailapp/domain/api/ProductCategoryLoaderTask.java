@@ -15,6 +15,7 @@ import com.ecommerce.retailapp.view.activities.ECartHomeActivity;
 import com.ecommerce.retailapp.view.adapters.CategoryListAdapter;
 import com.ecommerce.retailapp.view.adapters.CategoryListAdapter.OnItemClickListener;
 import com.ecommerce.retailapp.view.fragment.ProductOverviewFragment;
+import com.ecommerce.retailapp.view.fragment.ShopListFragment;
 import com.example.connectionframework.requestframework.sender.Repository;
 
 /**
@@ -68,7 +69,7 @@ public class ProductCategoryLoaderTask extends AsyncTask<String, Void, Void> {
 
                                 Utils.switchFragmentWithAnimation(
                                         R.id.frag_container,
-                                        new ProductOverviewFragment(),
+                                        new ShopListFragment(),
                                         ((ECartHomeActivity) context), null,
                                         AnimationType.SLIDE_LEFT);
 

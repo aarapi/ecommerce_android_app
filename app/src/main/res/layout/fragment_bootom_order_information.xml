@@ -13,6 +13,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
+
     <View
         android:layout_width="30dp"
         android:layout_height="3dp"
@@ -20,11 +21,11 @@
         android:background="@color/holo_gray_dark"
         android:layout_gravity="center"/>
 
+
     <ir.beigirad.zigzagview.ZigzagView
         android:id="@+id/zig_zag"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.55"
+        android:layout_height="200dp"
         app:zigzagBackgroundColor="@color/white"
         app:zigzagElevation="5dp"
         app:zigzagHeight="10dp"
@@ -71,177 +72,171 @@
 
     </ir.beigirad.zigzagview.ZigzagView>
 
-   <LinearLayout
-       android:layout_width="wrap_content"
-       android:layout_height="0dp"
-       android:layout_weight="1"
-
-       android:layout_gravity="center_horizontal"
-       android:orientation="vertical">
-
     <LinearLayout
-        android:id="@+id/ll_settings"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="10dp"
-        android:orientation="horizontal">
+        android:layout_height="0dp"
+        android:layout_weight="1"
 
-        <ImageView
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/ll_settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_location"
-            android:layout_gravity="center_vertical"/>
-        <TextView
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_location"
+                android:layout_gravity="center_vertical"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location:"
+                android:textSize="20sp"
+                android:layout_marginLeft="15dp"></TextView>
+
+            <EditText
+                android:id="@+id/et_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:background="@android:color/transparent"
+                android:textSize="15sp"
+                android:singleLine="true"
+                android:imeOptions="actionNext"
+                android:layout_gravity="center_vertical"
+                android:hint="write your location" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="49dp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/ll_settings"
+            android:background="@color/holo_gray_dark" />
+        <LinearLayout
+            android:id="@+id/ll_archive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Location:"
-            android:textSize="20sp"
-            android:layout_marginLeft="15dp"></TextView>
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/et_location"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_account" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:textSize="20sp"
+                android:layout_gravity="center_vertical"
+                android:text="Full Name:" />
+            <EditText
+                android:id="@+id/et_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:background="@android:color/transparent"
+                android:textSize="15sp"
+                android:singleLine="true"
+                android:imeOptions="actionNext"
+                android:layout_gravity="center_vertical"
+                android:hint="write your name" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="49dp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/ll_archive"
+            android:background="@color/holo_gray_dark" />
+        <LinearLayout
+            android:id="@+id/ll_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:background="@android:color/transparent"
-            android:textSize="15sp"
-            android:singleLine="true"
-            android:imeOptions="actionNext"
-            android:layout_gravity="center_vertical"
-            android:hint="write your location" />
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:orientation="horizontal">
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_phone_call" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:textSize="20sp"
+                android:text="Phone Nr:"></TextView>
+            <EditText
+                android:id="@+id/et_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:background="@android:color/transparent"
+                android:textSize="15sp"
+                android:singleLine="true"
+                android:imeOptions="actionNext"
+                android:layout_gravity="center_vertical"
+                android:hint="write your phone nr." />
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="49dp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/ll_edit"
+            android:background="@color/holo_gray_dark"></View>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="TOTAL: "
+                android:layout_gravity="center_vertical">
+            </TextView>
+            <TextView
+                android:id="@+id/checkout_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="0">
+            </TextView>
+
+
+            <Button
+                android:id="@+id/order_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_gravity="center_vertical"
+                android:text="ORDER NOW!"
+                android:textColor="@color/white"
+                android:background="@drawable/circular_border_shape" />
+
+        </LinearLayout>
     </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginLeft="49dp"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/ll_settings"
-        android:background="@color/holo_gray_dark" />
-    <LinearLayout
-        android:id="@+id/ll_archive"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_account" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:textSize="20sp"
-            android:layout_gravity="center_vertical"
-            android:text="Full Name:" />
-        <EditText
-            android:id="@+id/et_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:background="@android:color/transparent"
-            android:textSize="15sp"
-            android:singleLine="true"
-            android:imeOptions="actionNext"
-            android:layout_gravity="center_vertical"
-            android:hint="write your name" />
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginLeft="49dp"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/ll_archive"
-        android:background="@color/holo_gray_dark" />
-    <LinearLayout
-        android:id="@+id/ll_edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_phone_call" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:textSize="20sp"
-            android:text="Phone Nr:"></TextView>
-        <EditText
-            android:id="@+id/et_phone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:background="@android:color/transparent"
-            android:textSize="15sp"
-            android:singleLine="true"
-            android:imeOptions="actionNext"
-            android:layout_gravity="center_vertical"
-            android:hint="write your phone nr." />
-
-    </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginLeft="49dp"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/ll_edit"
-        android:background="@color/holo_gray_dark"></View>
-
-
-       <LinearLayout
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:layout_gravity="center_horizontal"
-           android:orientation="horizontal"
-           android:layout_marginTop="20dp">
-
-           <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_marginLeft="20dp"
-               android:text="TOTAL: "
-               android:layout_gravity="center_vertical">
-           </TextView>
-           <TextView
-               android:id="@+id/checkout_amount"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_gravity="center_vertical"
-               android:text="0">
-           </TextView>
-
-           <TextView
-            android:id="@+id/order_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-               android:layout_marginLeft="20dp"
-               android:layout_gravity="center_vertical"
-            android:background="@drawable/order_button"
-            android:ellipsize="marquee"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:freezesText="true"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:padding="5dp"
-            android:scrollHorizontally="true"
-            android:singleLine="true"
-            android:text="ORDER NOW!"
-            android:textColor="@color/color_white"
-            android:textSize="15sp"/>
-       </LinearLayout>
-   </LinearLayout>
 </LinearLayout>

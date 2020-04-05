@@ -7,7 +7,7 @@ android {
     buildToolsVersion "28.0.3"
 
     defaultConfig {
-        applicationId "com.hitesh_sahu.retailshop"
+        applicationId "com.ecommerce.retailshop"
         minSdkVersion 21
         targetSdkVersion 28
     }
@@ -23,6 +23,8 @@ android {
 dependencies {
     //Material design
     implementation project(":connectionframework")
+    implementation project(":library")
+
 
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
