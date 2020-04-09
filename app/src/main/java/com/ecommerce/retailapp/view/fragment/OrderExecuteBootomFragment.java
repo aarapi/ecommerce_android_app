@@ -8,19 +8,29 @@
 
 package com.ecommerce.retailapp.view.fragment;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.ecommerce.retailapp.R;
 import com.ecommerce.retailapp.domain.mock.RequestFunction;
@@ -28,27 +38,32 @@ import com.ecommerce.retailapp.model.entities.Product;
 import com.ecommerce.retailapp.view.activities.ECartHomeActivity;
 import com.ecommerce.retailapp.view.adapters.ReceiptProductListAdapter;
 import com.example.connectionframework.requestframework.sender.SenderBridge;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import studio.carbonylgroup.textfieldboxes.ExtendedEditText;
 
-import static com.ecommerce.retailapp.view.fragment.CheckoutPaymentFragmnet.CHECKOUT_DATA;
 
-public class OrderExecuteBootomFragment extends BottomSheetDialogFragment
+public class OrderExecuteBootomFragment extends Fragment
         implements View.OnClickListener {
     public static final String TAG = "ActionBottomDialog";
     private ItemClickListener mListener;
-    private Button order_button;
+    private RelativeLayout order_button;
     private List<Product> productList;
     private String cashOutAmount;
+    public static String CHECKOUT_DATA = "CHECKOUT_DATA";
     private EditText et_location, et_name, et_phone;
     private ListView receiptListView;
-    private TextView total_amount;
+    private TextView total_amount, checkout_total_amount;
     private static boolean isCashPayment;
     private static ECartHomeActivity eCartHomeActivity;
     private SweetAlertDialog pDialog;
+    private TextView tv_cancel;
 
 
 
@@ -67,6 +82,7 @@ public class OrderExecuteBootomFragment extends BottomSheetDialogFragment
     }
 
 
+
     @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -75,13 +91,19 @@ public class OrderExecuteBootomFragment extends BottomSheetDialogFragment
             cashOutAmount = (String) getArguments().getSerializable("TOTAL_AMOUNT");
             //CenterRepository.getCenterRepository().getListOfProductsInShoppingList().clear();
         }
-
+        ((ECartHomeActivity) getContext()).getCheckout_button().setVisibility(View.GONE);
         receiptListView = view.findViewById(R.id.receipt_list);
         total_amount = view.findViewById(R.id.checkout_amount);
+        checkout_total_amount = view.findViewById(R.id.checkout_total_amount);
+        tv_cancel = view.findViewById(R.id.tv_cancel);
+
+        tv_cancel.setOnClickListener(this);
 
         showReceipt();
 
         et_location = view.findViewById(R.id.et_location);
+        et_location.setOnClickListener(this);
+        et_location.setOnClickListener(this);
         et_name = view.findViewById(R.id.et_name);
         et_phone = view.findViewById(R.id.et_phone);
 
@@ -111,9 +133,14 @@ public class OrderExecuteBootomFragment extends BottomSheetDialogFragment
                 SenderBridge senderBridge = new SenderBridge(getContext());
                 senderBridge.sendMessageAssync(RequestFunction.makeAnOrder(productList,inputValue), getContext());
             }
+        }else if (view == tv_cancel){
+            getActivity().onBackPressed();
+        }else if (view == et_location){
+
         }
 
     }
+
     public interface ItemClickListener {
         void onItemClick(String item);
     }
@@ -125,10 +152,17 @@ public class OrderExecuteBootomFragment extends BottomSheetDialogFragment
 
         total_amount.setText(cashOutAmount);
 
+        String amount = cashOutAmount.substring(4);
+        BigDecimal amountValue = BigDecimal.valueOf(Long.valueOf(amount)+ Long.valueOf("50"));
+        cashOutAmount = "ALL "+amountValue;
+
+        checkout_total_amount.setText(cashOutAmount);
+
+
 
     }
 
-    public Button getOrder_button() {
+    public RelativeLayout getOrder_button() {
         return order_button;
     }
 
@@ -139,22 +173,48 @@ public class OrderExecuteBootomFragment extends BottomSheetDialogFragment
     public boolean validateInput(String ... inputValue) {
 
         if (inputValue[0].isEmpty()) {
-            et_location.setError("Location field can not be empty!");
-
-        }
-        if (inputValue[1].isEmpty()) {
-            et_name.setError("Name field can not be empty!");
-        }
-        if (inputValue[2].isEmpty()) {
-            et_phone.setError("Phone field can not be empty!");
-        }
-
-        if (inputValue[0].isEmpty() || inputValue[1].isEmpty() || inputValue[2].isEmpty())
-        {
+            et_location.setError("Plotesoni fushen!");
             return false;
+        }else if (inputValue[1].isEmpty()){
+            et_name.setError("Plotesoni fushen!");
+            return false;
+        }else if (inputValue[2].isEmpty()){
+            et_phone.setError("Plotesoni fushen!");
         }
+
+
+
 
         return true;
     }
 
+    private void setupFullHeight(BottomSheetDialog bottomSheetDialog) {
+        FrameLayout bottomSheet = (FrameLayout) bottomSheetDialog.findViewById(R.id.design_bottom_sheet);
+        BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
+        ViewGroup.LayoutParams layoutParams = bottomSheet.getLayoutParams();
+
+        int windowHeight = getWindowHeight();
+        if (layoutParams != null) {
+            layoutParams.height = windowHeight;
+        }
+        bottomSheet.setLayoutParams(layoutParams);
+        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+    }
+
+    private int getWindowHeight() {
+        // Calculate window height for fullscreen use
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.heightPixels;
+    }
+
+    public void dismiss(){
+        getActivity().onBackPressed();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ((ECartHomeActivity) getContext()).getCheckout_button().setVisibility(View.VISIBLE);
+    }
 }

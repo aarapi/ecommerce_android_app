@@ -13,12 +13,12 @@
         <item
             android:id="@+id/home"
             android:checked="true"
-            android:icon="@drawable/app_icon"
-            android:title="Home" />
+            android:icon="@drawable/ic_shop"
+            android:title="Kryefaqja" />
         <item
             android:id="@+id/my_cart"
-            android:icon="@android:drawable/ic_menu_info_details"
-            android:title="My Cart" />
+            android:icon="@drawable/ic_market"
+            android:title="Shporta" />
 
 <!--        <item-->
 <!--            android:id="@+id/apriori_result"-->
@@ -27,11 +27,8 @@
         <item
             android:id="@+id/contact_us"
             android:icon="@android:drawable/ic_menu_call"
-            android:title="Contact US" />
-        <item
-            android:id="@+id/settings"
-            android:icon="@android:drawable/ic_menu_preferences"
-            android:title="Settings" />
+            android:title="Kontaktoni" />
+
     </group>
 
 </menu>

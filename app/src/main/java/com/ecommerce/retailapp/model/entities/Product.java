@@ -61,6 +61,8 @@ public class Product extends BaseJsonModel {
 
     private String shopName;
 
+    private String subCategoryName;
+
     /**
      * @param itemName
      * @param itemShortDesc
@@ -86,6 +88,10 @@ public class Product extends BaseJsonModel {
     }
 
     public String __type = getClass().getSimpleName();
+
+    public String getSubCategoryName() {
+        return subCategoryName;
+    }
 
     public String getProductId() {
         return productId;

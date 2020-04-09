@@ -7,236 +7,261 @@
   ~  Written by Albi Arapi <albiarapi1@gmail.com>, 2020.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#F6F2F2"
+    android:stackFromBottom="true"
+    android:transcriptMode="normal"
     android:orientation="vertical">
 
 
-    <View
-        android:layout_width="30dp"
-        android:layout_height="3dp"
-        android:layout_marginTop="5dp"
-        android:background="@color/holo_gray_dark"
-        android:layout_gravity="center"/>
-
-
-    <ir.beigirad.zigzagview.ZigzagView
-        android:id="@+id/zig_zag"
+        <RelativeLayout
+            android:id="@+id/htab_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:background="@drawable/ic_header"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:text="Porosit"></TextView>
+            <TextView
+                android:id="@+id/tv_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:text="Anulo"></TextView>
+        </RelativeLayout>
+    
+    <RelativeLayout
+        android:id="@+id/ll_total_amount"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        app:zigzagBackgroundColor="@color/white"
-        app:zigzagElevation="5dp"
-        app:zigzagHeight="10dp"
-        app:zigzagShadowAlpha="0.9"
+        android:layout_height="130dp"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp"
-        app:zigzagSides="bottom"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/round_background_white"
         >
         <RelativeLayout
-            android:id="@+id/cash_payment"
+            android:id="@+id/ll_nentotali"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-
-            >
-            <TextView
-                android:id="@+id/receipt_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="5dp"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                android:fontFamily="serif-monospace"
-                android:text="Receipt"
-                ></TextView>
-            <View
-                android:id="@+id/vw_receipt_title"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="@color/opaque"
-                android:layout_below="@+id/receipt_title"
-                android:layout_marginBottom="10dp"></View>
-            <ListView
-                android:id="@+id/receipt_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/vw_receipt_title"
-                android:divider="@null"
-                android:dividerHeight="0dp"
-                ></ListView>
-
-        </RelativeLayout>
-
-    </ir.beigirad.zigzagview.ZigzagView>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-
-        android:layout_gravity="center_horizontal"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:id="@+id/ll_settings"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="10dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_location"
-                android:layout_gravity="center_vertical"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Location:"
-                android:textSize="20sp"
-                android:layout_marginLeft="15dp"></TextView>
-
-            <EditText
-                android:id="@+id/et_location"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:background="@android:color/transparent"
+                android:text="Nentotali"
                 android:textSize="15sp"
-                android:singleLine="true"
-                android:imeOptions="actionNext"
-                android:layout_gravity="center_vertical"
-                android:hint="write your location" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginLeft="49dp"
-            android:layout_marginTop="10dp"
-            android:layout_below="@+id/ll_settings"
-            android:background="@color/holo_gray_dark" />
-        <LinearLayout
-            android:id="@+id/ll_archive"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_account" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:textSize="20sp"
-                android:layout_gravity="center_vertical"
-                android:text="Full Name:" />
-            <EditText
-                android:id="@+id/et_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:background="@android:color/transparent"
-                android:textSize="15sp"
-                android:singleLine="true"
-                android:imeOptions="actionNext"
-                android:layout_gravity="center_vertical"
-                android:hint="write your name" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginLeft="49dp"
-            android:layout_marginTop="10dp"
-            android:layout_below="@+id/ll_archive"
-            android:background="@color/holo_gray_dark" />
-        <LinearLayout
-            android:id="@+id/ll_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_phone_call" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:textSize="20sp"
-                android:text="Phone Nr:"></TextView>
-            <EditText
-                android:id="@+id/et_phone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:background="@android:color/transparent"
-                android:textSize="15sp"
-                android:singleLine="true"
-                android:imeOptions="actionNext"
-                android:layout_gravity="center_vertical"
-                android:hint="write your phone nr." />
-
-        </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginLeft="49dp"
-            android:layout_marginTop="10dp"
-            android:layout_below="@+id/ll_edit"
-            android:background="@color/holo_gray_dark"></View>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:text="TOTAL: "
-                android:layout_gravity="center_vertical">
-            </TextView>
+                android:textColor="@color/color_black_light"
+                android:textStyle="bold"></TextView>
             <TextView
                 android:id="@+id/checkout_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="0">
-            </TextView>
-
-
-            <Button
-                android:id="@+id/order_button"
+                android:layout_alignParentEnd="true"
+                android:text="ALL 250"
+                android:textSize="15sp"
+                android:textColor="@color/color_gray_light"
+                android:textStyle="bold"></TextView>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/ll_transporti"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ll_nentotali"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp">
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_gravity="center_vertical"
-                android:text="ORDER NOW!"
-                android:textColor="@color/white"
-                android:background="@drawable/circular_border_shape" />
+                android:text="Transporti"
+                android:textSize="15sp"
+                android:textColor="@color/color_black_light"
+                android:textStyle="bold"></TextView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="ALL 50"
+                android:textSize="15sp"
+                android:textColor="@color/color_gray_light"
+                android:textStyle="bold"></TextView>
+        </RelativeLayout>
 
+        <View
+            android:id="@+id/v_total"
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:layout_below="@+id/ll_transporti"
+            android:background="@color/color_gray_light"></View>
+        <RelativeLayout
+            android:id="@+id/ll_total"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/v_total"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total"
+                android:textSize="20sp"
+                android:layout_centerVertical="true"
+                android:textColor="@color/color_black"
+                android:textStyle="bold"></TextView>
+            <TextView
+                android:id="@+id/checkout_total_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="ALL 50"
+                android:layout_centerVertical="true"
+                android:textSize="20sp"
+                android:textColor="@color/color_black"
+                android:textStyle="bold"></TextView>
+        </RelativeLayout>
+        
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/rl_information"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:padding="5dp"
+        android:orientation="vertical"
+        android:layout_below="@+id/ll_total_amount"
+        android:background="@drawable/round_background_white"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_location_edit"></ImageView>
+        <EditText
+            android:id="@+id/et_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#3F51B5"
+            android:inputType="text"
+            android:imeOptions="actionNext"
+            android:singleLine="true"
+            android:hint="Vendodhja juaj..."
+            />
         </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_person_edit"></ImageView>
+        <EditText
+            android:id="@+id/et_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#3F51B5"
+            android:imeOptions="actionNext"
+            android:singleLine="true"
+            android:hint="Emri juaj..."
+
+            />
     </LinearLayout>
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_phone_call_edit"></ImageView>
+        <EditText
+            android:id="@+id/et_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Numri i telefonit..."
+            android:backgroundTint="#3F51B5"
+            android:inputType="phone"
+            android:singleLine="true"
+            />
+    </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/ll_receipt"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/rl_information"
+        android:layout_above="@+id/order_button"
+        android:background="@drawable/round_background_white"
+        android:padding="3dp"
+        >
+        <ListView
+            android:id="@+id/receipt_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></ListView>
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/order_button"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:foreground="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:background="@drawable/order_button"
+
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Porosit Tani"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:layout_centerInParent="true"></TextView>
+    </RelativeLayout>
+
+
+</RelativeLayout>

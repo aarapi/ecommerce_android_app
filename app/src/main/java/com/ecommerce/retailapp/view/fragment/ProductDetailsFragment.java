@@ -49,12 +49,14 @@ import java.math.BigDecimal;
 /**
  * Fragment that appears in the "content_frame", shows a animal.
  */
-public class ProductDetailsFragment extends Fragment {
+public class ProductDetailsFragment extends Fragment implements OnClickListener {
 
     private int productListNumber;
     private ImageView itemImage;
+    private  ImageView iv_back;
     private TextView itemSellPrice;
     private TextView itemName;
+    private TextView tv_product_name;
     private TextView quanitity;
     private TextView itemdescription;
     private IBuilder mDrawableBuilder;
@@ -62,9 +64,6 @@ public class ProductDetailsFragment extends Fragment {
     private ColorGenerator mColorGenerator = ColorGenerator.MATERIAL;
     private String subcategoryKey;
     private boolean isFromCart;
-    private ClickableViewPager similarProductsPager;
-    private ClickableViewPager topSellingPager;
-    private Toolbar mToolbar;
 
     /**
      * Instantiates a new product details fragment.
@@ -83,37 +82,12 @@ public class ProductDetailsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.frag_product_detail,
                 container, false);
 
-        mToolbar = (Toolbar) rootView.findViewById(R.id.htab_toolbar);
-        if (mToolbar != null) {
-            ((ECartHomeActivity) getActivity()).setSupportActionBar(mToolbar);
-        }
 
-        if (mToolbar != null) {
-            ((ECartHomeActivity) getActivity()).getSupportActionBar()
-                    .setDisplayHomeAsUpEnabled(true);
-
-            mToolbar.setNavigationIcon(R.drawable.ic_drawer);
-
-        }
-
-        mToolbar.setTitleTextColor(Color.WHITE);
-
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((ECartHomeActivity) getActivity()).getmDrawerLayout()
-                        .openDrawer(GravityCompat.START);
-            }
-        });
 
         ((ECartHomeActivity) getActivity()).getSupportActionBar()
                 .setDisplayHomeAsUpEnabled(true);
 
-        similarProductsPager = (ClickableViewPager) rootView
-                .findViewById(R.id.similar_products_pager);
 
-        topSellingPager = (ClickableViewPager) rootView
-                .findViewById(R.id.top_selleing_pager);
 
         itemSellPrice = ((TextView) rootView
                 .findViewById(R.id.category_discount));
@@ -121,11 +95,14 @@ public class ProductDetailsFragment extends Fragment {
         quanitity = ((TextView) rootView.findViewById(R.id.iteam_amount));
 
         itemName = ((TextView) rootView.findViewById(R.id.product_name));
+        tv_product_name = rootView.findViewById(R.id.tv_product_name);
 
         itemdescription = ((TextView) rootView
                 .findViewById(R.id.product_description));
 
         itemImage = (ImageView) rootView.findViewById(R.id.product_image);
+        iv_back = rootView.findViewById(R.id.iv_back);
+        iv_back.setOnClickListener(this);
 
         fillProductData();
 
@@ -394,76 +371,17 @@ public class ProductDetailsFragment extends Fragment {
 
                 if (event.getAction() == KeyEvent.ACTION_UP
                         && keyCode == KeyEvent.KEYCODE_BACK) {
-
-                    if (isFromCart) {
-
-                        Utils.switchContent(R.id.frag_container,
-                                Utils.SHOPPING_LIST_TAG,
-                                ((ECartHomeActivity) (getActivity())),
-                                AnimationType.SLIDE_UP);
-                    } else {
-
-                        Utils.switchContent(R.id.frag_container,
-                                Utils.PRODUCT_OVERVIEW_FRAGMENT_TAG,
-                                ((ECartHomeActivity) (getActivity())),
-                                AnimationType.SLIDE_RIGHT);
-                    }
+                    goBack();
 
                 }
                 return true;
             }
         });
 
-        if (isFromCart) {
-
-            similarProductsPager.setVisibility(View.GONE);
-
-            topSellingPager.setVisibility(View.GONE);
-
-        } else {
-            showRecomondation();
-        }
-
         return rootView;
     }
 
-    private void showRecomondation() {
 
-        SimilarProductsPagerAdapter mCustomPagerAdapter = new SimilarProductsPagerAdapter(
-                getActivity(), subcategoryKey);
-
-        similarProductsPager.setAdapter(mCustomPagerAdapter);
-
-        similarProductsPager.setOnItemClickListener(new OnItemClickListener() {
-
-            @Override
-            public void onItemClick(int position) {
-
-                productListNumber = position;
-
-                fillProductData();
-
-                Utils.vibrate(getActivity());
-
-            }
-        });
-
-        topSellingPager.setAdapter(mCustomPagerAdapter);
-
-        topSellingPager.setOnItemClickListener(new OnItemClickListener() {
-
-            @Override
-            public void onItemClick(int position) {
-
-                productListNumber = position;
-
-                fillProductData();
-
-                Utils.vibrate(getActivity());
-
-            }
-        });
-    }
 
     public void fillProductData() {
 
@@ -473,6 +391,9 @@ public class ProductDetailsFragment extends Fragment {
             //Fetch and display item from Gloabl Data Model
 
             itemName.setText(CenterRepository.getCenterRepository()
+                    .getMapOfProductsInCategory().get(subcategoryKey).get(productListNumber)
+                    .getItemName());
+            tv_product_name.setText(CenterRepository.getCenterRepository()
                     .getMapOfProductsInCategory().get(subcategoryKey).get(productListNumber)
                     .getItemName());
 
@@ -491,11 +412,19 @@ public class ProductDetailsFragment extends Fragment {
                             .getSellMRP()))).toString()
                     + "  ";
 
-            String buyMRP = Money.albaniaCurrency(
-                    BigDecimal.valueOf(Long.valueOf(CenterRepository
-                            .getCenterRepository().getMapOfProductsInCategory()
-                            .get(subcategoryKey).get(productListNumber)
-                            .getMRP()))).toString();
+            String buyMRP = "";
+            if (BigDecimal.valueOf(Long.valueOf(CenterRepository
+                    .getCenterRepository().getMapOfProductsInCategory()
+                    .get(subcategoryKey).get(productListNumber)
+                    .getMRP())).toString().equals("0") ){
+
+            }else {
+                 buyMRP = Money.albaniaCurrency(
+                        BigDecimal.valueOf(Long.valueOf(CenterRepository
+                                .getCenterRepository().getMapOfProductsInCategory()
+                                .get(subcategoryKey).get(productListNumber)
+                                .getMRP()))).toString();
+            }
 
             String costString = sellCostString + buyMRP;
 
@@ -559,6 +488,8 @@ public class ProductDetailsFragment extends Fragment {
 
             itemName.setText(CenterRepository.getCenterRepository()
                     .getListOfProductsInShoppingList().get(productListNumber).getItemName());
+            tv_product_name.setText(CenterRepository.getCenterRepository()
+                    .getListOfProductsInShoppingList().get(productListNumber).getItemName());
 
             quanitity.setText(CenterRepository.getCenterRepository()
                     .getListOfProductsInShoppingList().get(productListNumber).getQuantity());
@@ -572,11 +503,18 @@ public class ProductDetailsFragment extends Fragment {
                             .get(productListNumber).getSellMRP()))).toString()
                     + "  ";
 
-            String buyMRP = Money.albaniaCurrency(
-                    BigDecimal.valueOf(Long.valueOf(CenterRepository
-                            .getCenterRepository().getListOfProductsInShoppingList()
-                            .get(productListNumber).getMRP()))).toString();
+            String buyMRP = "";
+            if (BigDecimal.valueOf(Long.valueOf(CenterRepository
+                    .getCenterRepository().getListOfProductsInShoppingList()
+                    .get(productListNumber).getMRP())).toString().equals("0")){
 
+            }else {
+                 buyMRP = Money.albaniaCurrency(
+                        BigDecimal.valueOf(Long.valueOf(CenterRepository
+                                .getCenterRepository().getListOfProductsInShoppingList()
+                                .get(productListNumber).getMRP()))).toString();
+
+            }
             String costString = sellCostString + buyMRP;
 
             itemSellPrice.setText(costString, BufferType.SPANNABLE);
@@ -634,5 +572,27 @@ public class ProductDetailsFragment extends Fragment {
         }
     }
 
+    public void goBack(){
+        if (isFromCart) {
 
+            Utils.switchContent(R.id.frag_container,
+                    Utils.SHOPPING_LIST_TAG,
+                    ((ECartHomeActivity) (getActivity())),
+                    AnimationType.SLIDE_UP);
+        } else {
+
+            Utils.switchContent(R.id.frag_container,
+                    Utils.PRODUCT_OVERVIEW_FRAGMENT_TAG,
+                    ((ECartHomeActivity) (getActivity())),
+                    AnimationType.SLIDE_RIGHT);
+        }
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view == iv_back){
+            goBack();
+        }
+    }
 }

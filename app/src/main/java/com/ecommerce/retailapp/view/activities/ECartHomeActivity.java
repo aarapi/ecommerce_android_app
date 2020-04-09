@@ -17,7 +17,6 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.ecommerce.retailapp.domain.mock.CheckSetup;
-import com.ecommerce.retailapp.view.fragment.CheckoutPaymentFragmnet;
 import com.ecommerce.retailapp.view.fragment.OrderExecuteBootomFragment;
 import com.example.connectionframework.requestframework.receiver.ReceiverActivity;
 import com.google.android.material.navigation.NavigationView;
@@ -76,7 +75,6 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
     private int itemCount = 0;
     private BigDecimal checkoutAmount = new BigDecimal(BigInteger.ZERO);
     private DrawerLayout mDrawerLayout;
-    private CheckoutPaymentFragmnet checkoutPaymentFragmnet;
     private FrameLayout frag_container;
     private RelativeLayout rl_error_server;
     private TextView tv_error_message;
@@ -183,7 +181,7 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
 
                         Utils.vibrate(getApplicationContext());
 
-                        showPurchaseDialog();
+                        choosePaymentTypeDialog(false);
 
                     }
                 });
@@ -237,21 +235,12 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
 
                                 mDrawerLayout.closeDrawers();
 
-                                Utils.switchContent(R.id.frag_container,
-                                        Utils.CONTACT_US_FRAGMENT,
-                                        ECartHomeActivity.this,
-                                        AnimationType.SLIDE_LEFT);
+//                                Utils.switchContent(R.id.frag_container,
+//                                        Utils.CONTACT_US_FRAGMENT,
+//                                        ECartHomeActivity.this,
+//                                        AnimationType.SLIDE_LEFT);
                                 return true;
 
-                            case R.id.settings:
-
-                                mDrawerLayout.closeDrawers();
-
-                                Utils.switchContent(R.id.frag_container,
-                                        Utils.SETTINGS_FRAGMENT_TAG,
-                                        ECartHomeActivity.this,
-                                        AnimationType.SLIDE_LEFT);
-                                return true;
                             default:
                                 return true;
                         }
@@ -451,14 +440,14 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
 
     public void openCheckoutPaymentFragment(boolean isCashPayment){
         Bundle bundle = new Bundle();
-        bundle.putSerializable(CheckoutPaymentFragmnet.CHECKOUT_DATA,
+        bundle.putSerializable(OrderExecuteBootomFragment.CHECKOUT_DATA,
                 (Serializable) CenterRepository.getCenterRepository().getListOfProductsInShoppingList());
         bundle.putSerializable("TOTAL_AMOUNT", (Serializable) checkOutAmount.getText());
 
          orderExecuteBootomFragment =
                 OrderExecuteBootomFragment.newInstance(bundle, this, isCashPayment);
-        orderExecuteBootomFragment.show(getSupportFragmentManager(),
-                OrderExecuteBootomFragment.TAG);
+         Utils.switchFragmentWithAnimation(R.id.frag_container,orderExecuteBootomFragment,
+                 this, Utils.ORDER_EXECUTE_FRAGMENT,  AnimationType.SLIDE_DOWN);
     }
 
 
@@ -499,9 +488,15 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
                 @Override
                 public void run() {
                     clearOrderList();
-                    orderExecuteBootomFragment.dismiss();
+
                     orderExecuteBootomFragment.getpDialog().setTitleText(((String) data.get(0)))
-                            .setConfirmText("OK")
+                            .setConfirmText("OK").setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+                            orderExecuteBootomFragment.getpDialog().dismissWithAnimation();
+                            orderExecuteBootomFragment.dismiss();
+                        }
+                    })
                             .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
 
                     CenterRepository.getCenterRepository().setListOfProductsInShoppingList(new ArrayList<Product>());

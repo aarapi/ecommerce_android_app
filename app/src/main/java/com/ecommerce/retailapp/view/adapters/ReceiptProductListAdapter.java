@@ -16,8 +16,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.ecommerce.retailapp.R;
 import com.ecommerce.retailapp.model.entities.Product;
+import com.ecommerce.retailapp.utils.ColorGenerator;
+import com.ecommerce.retailapp.view.customview.TextDrawable;
 
 import java.util.List;
 
@@ -25,10 +28,16 @@ public class ReceiptProductListAdapter extends ArrayAdapter<Product> implements 
 
     private List<Product> dataSet;
     private Context mContext;
+    private TextDrawable.IBuilder mDrawableBuilder;
+    private TextDrawable drawable;
+    private ColorGenerator mColorGenerator = ColorGenerator.MATERIAL;
+    private String ImageUrl;
+
 
     // View lookup cache
     private static class ViewHolder {
-        TextView tv_productName, tv_product_quantity, tv_product_price;
+        TextView tv_productName, tv_product_quantity, tv_product_price, tv_product_description;
+        ImageView product_mage;
     }
 
     public ReceiptProductListAdapter(List<Product> data, Context context) {
@@ -63,6 +72,8 @@ public class ReceiptProductListAdapter extends ArrayAdapter<Product> implements 
             viewHolder.tv_productName = convertView.findViewById(R.id.tv_productName);
             viewHolder.tv_product_quantity = convertView.findViewById(R.id.tv_product_quantity);
             viewHolder.tv_product_price = convertView.findViewById(R.id.tv_product_price);
+            viewHolder.tv_product_description = convertView.findViewById(R.id.product_description);
+            viewHolder.product_mage = convertView.findViewById(R.id.product_mage);
 
 
             result = convertView;
@@ -73,9 +84,23 @@ public class ReceiptProductListAdapter extends ArrayAdapter<Product> implements 
             result = convertView;
         }
 
+
+        mDrawableBuilder = TextDrawable.builder().beginConfig().withBorder(4)
+                .endConfig().roundRect(10);
+
+        drawable = mDrawableBuilder.build(String.valueOf(dataModel.getItemName().charAt(0)), mColorGenerator
+                .getColor(dataModel.getItemName()));
+
+        ImageUrl = dataModel.getImageURL();
+
         viewHolder.tv_productName.setText(dataModel.getItemName());
         viewHolder.tv_product_quantity.setText(dataModel.getQuantity());
         viewHolder.tv_product_price.setText(dataModel.getSellMRP());
+        viewHolder.tv_product_description.setText(dataModel.getItemDetail());
+
+        Glide.with(getContext()).load(ImageUrl).placeholder(drawable)
+                .error(drawable)
+                .centerCrop().into(viewHolder.product_mage);
 
 
         return convertView;

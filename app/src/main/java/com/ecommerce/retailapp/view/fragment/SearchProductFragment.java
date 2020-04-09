@@ -43,6 +43,7 @@ import com.ecommerce.retailapp.view.adapters.ProductListAdapter;
 import com.example.connectionframework.requestframework.sender.Repository;
 import com.example.connectionframework.requestframework.sender.SenderBridge;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.common.util.concurrent.ListenableFutureTask;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -59,7 +60,6 @@ public class SearchProductFragment extends BottomSheetDialogFragment {
     private final int REQ_CODE_SPEECH_INPUT = 100;
     ArrayList<Product> searchProductList = new ArrayList<>();
     boolean searchInProgress = false;
-    private TextView heading;
     private ImageButton btnSearch;
     private EditText serchInput;
     private RecyclerView recyclerView;
@@ -87,12 +87,21 @@ public class SearchProductFragment extends BottomSheetDialogFragment {
 
         btnSearch = (ImageButton) rootView.findViewById(R.id.btn_search);
 
-        heading = (TextView) rootView.findViewById(R.id.txtSpeech_heading);
         loading_bar = rootView.findViewById(R.id.loading_bar);
 
         serchInput = (EditText) rootView.findViewById(R.id.edt_search_input);
 
         serchInput.setSelected(true);
+
+        serchInput.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
+                if ((keyevent.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    sendMessage();
+                    return true;
+                }
+                return false;
+            }
+        });
 
         recyclerView = (RecyclerView) rootView
                 .findViewById(R.id.product_list_recycler_view);
@@ -107,40 +116,28 @@ public class SearchProductFragment extends BottomSheetDialogFragment {
 
             @Override
             public void onClick(View v) {
-               recyclerView.setVisibility(View.GONE);
-                rl_error_server.setVisibility(View.GONE);
-               loading_bar.setVisibility(View.VISIBLE);
-                SenderBridge senderBridge = new SenderBridge(getContext());
-
-                senderBridge.sendMessageAssync
-                        (RequestFunction.getSearchedProducts
-                                (serchInput.getText().toString()), getContext());
+              sendMessage();
             }
         });
 
         rootView.setFocusableInTouchMode(true);
         rootView.requestFocus();
-        rootView.setOnKeyListener(new View.OnKeyListener() {
 
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-
-                if (event.getAction() == KeyEvent.ACTION_UP
-                        && keyCode == KeyEvent.KEYCODE_BACK) {
-
-                    Utils.switchContent(R.id.frag_container,
-                            Utils.HOME_FRAGMENT,
-                            ((ECartHomeActivity) (getContext())),
-                            AnimationType.SLIDE_DOWN);
-                }
-                return true;
-            }
-        });
         return rootView;
 
     }
 
 
+    public void sendMessage(){
+        recyclerView.setVisibility(View.GONE);
+        rl_error_server.setVisibility(View.GONE);
+        loading_bar.setVisibility(View.VISIBLE);
+        SenderBridge senderBridge = new SenderBridge(getContext());
+
+        senderBridge.sendMessageAssync
+                (RequestFunction.getSearchedProducts
+                        (serchInput.getText().toString()), getContext());
+    }
 
     public void onDataReceive(List<Object> data){
 
@@ -166,6 +163,13 @@ public class SearchProductFragment extends BottomSheetDialogFragment {
 
                         @Override
                         public void onItemClick(View view, int position) {
+//                            Utils.switchFragmentWithAnimation(R.id.frag_container,
+//                                    new ProductDetailsFragment(
+//                                            "SearchProducts",
+//                                            position,
+//                                            false),
+//                                    ((ECartHomeActivity) (getContext())), null,
+//                                    AnimationType.SLIDE_LEFT);
                         }
                     });
                 }else {

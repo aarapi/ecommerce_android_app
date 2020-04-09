@@ -107,10 +107,15 @@ public class ProductListAdapter extends
                         .getSellMRP()))).toString()
                 + "  ";
 
-        String buyMRP = Money.albaniaCurrency(
-                BigDecimal.valueOf(Long.valueOf(productList.get(position)
-                        .getMRP()))).toString();
+        String buyMRP = "";
+        if ( BigDecimal.valueOf(Long.valueOf(productList.get(position)
+                .getMRP())).toString().equals("0")){
 
+        }else {
+             buyMRP = Money.albaniaCurrency(
+                    BigDecimal.valueOf(Long.valueOf(productList.get(position)
+                            .getMRP()))).toString();
+        }
         String costString = sellCostString + buyMRP;
 
         holder.itemCost.setText(costString, BufferType.SPANNABLE);

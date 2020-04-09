@@ -84,7 +84,7 @@ public class HomeFragment extends Fragment {
         collapsingToolbar = (CollapsingToolbarLayout) view
                 .findViewById(R.id.collapsing_toolbar);
 
-        collapsingToolbar.setTitle("Categories");
+        collapsingToolbar.setTitle("Kategorite");
 
         ImageView header = (ImageView) view.findViewById(R.id.header);
 

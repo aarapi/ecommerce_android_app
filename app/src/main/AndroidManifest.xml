@@ -21,6 +21,7 @@
         <!-- Single Activity Model-->
         <activity
             android:name=".view.activities.ECartHomeActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize|adjustPan"
             android:label="@string/app_name"></activity>
 
         <activity

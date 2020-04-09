@@ -11,6 +11,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Vibrator;
 import android.provider.MediaStore;
 import androidx.fragment.app.Fragment;
@@ -23,6 +24,7 @@ import com.ecommerce.retailapp.R;
 import com.ecommerce.retailapp.view.fragment.ContactUsFragment;
 import com.ecommerce.retailapp.view.fragment.HomeFragment;
 import com.ecommerce.retailapp.view.fragment.MyCartFragment;
+import com.ecommerce.retailapp.view.fragment.OrderExecuteBootomFragment;
 import com.ecommerce.retailapp.view.fragment.ProductOverviewFragment;
 import com.ecommerce.retailapp.view.fragment.SettingsFragment;
 import com.ecommerce.retailapp.view.fragment.ShopListFragment;
@@ -42,6 +44,7 @@ public class Utils {
     public static final String MY_ORDERS_FRAGMENT = "MYOrdersFragment";
     public static final String HOME_FRAGMENT = "HomeFragment";
     public static final String SHOP_FRAGMENT = "ShopFragment";
+    public static final String ORDER_EXECUTE_FRAGMENT = "CheckoutFragment";
     public static final String SEARCH_FRAGMENT_TAG = "SearchFragment";
     public static final String SETTINGS_FRAGMENT_TAG = "SettingsFragment";
     public static final String OTP_LOGIN_TAG = "OTPLogingFragment";
@@ -348,6 +351,8 @@ public class Utils {
                     fragmentToReplace = new MyCartFragment();
                 }else if (TAG.equals(SHOP_FRAGMENT)){
                     fragmentToReplace = new ShopListFragment();
+                }else if (TAG.equals(ORDER_EXECUTE_FRAGMENT)){
+                    fragmentToReplace = new OrderExecuteBootomFragment();
                 }
 
             } else
@@ -365,6 +370,8 @@ public class Utils {
                     fragmentToReplace = (ContactUsFragment) fragment;
                 }else if (TAG.equals(SHOP_FRAGMENT)) {
                     fragmentToReplace = (ShopListFragment) fragment;
+                }else if (TAG.equals(ORDER_EXECUTE_FRAGMENT)){
+                    fragmentToReplace = (OrderExecuteBootomFragment) fragment;
                 }
             }
 

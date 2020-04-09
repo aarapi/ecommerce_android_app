@@ -27,5 +27,10 @@
     <style name="TabLayout_Theme" parent="@style/MyTheme">
         <item name="android:singleLine">true</item>
     </style>
+    <style name="foodRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/ratingstars</item>
+        <item name="android:minHeight">22dip</item>
+        <item name="android:maxHeight">22dip</item>
+    </style>
 
 </resources>

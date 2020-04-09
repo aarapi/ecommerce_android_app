@@ -45,6 +45,7 @@ dependencies {
     //Loading animations
     implementation 'com.wang.avi:library:1.0.5'
     implementation 'com.nineoldandroids:library:2.4.0'
-    implementation 'com.github.beigirad:ZigzagView:1.0.7'
+    implementation 'com.github.HITGIF:TextFieldBoxes:1.4.5'
+
 
 }
