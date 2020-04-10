@@ -71,10 +71,23 @@ public class SenderBridge {
 
         if (message.getData() != null) {
             if (message.getData().size() == 0) {
-                Repository.newInstance().setMessageError("No Products found");
+                Repository.newInstance().setMessageError("Nuk u gjet asnje produkt");
                 message.setData(null);
             }
+        }if(message.getStatusCode() != MessagingFrameworkConstant.STATUS_CODES.Success){
+            if (message.getStatusCode() == MessagingFrameworkConstant.STATUS_CODES.ConnectionFailed){
+                Repository.newInstance().setMessageError("Kontrolloni Lidhjen me Rrjetin");
+            }else if (message.getStatusCode() == MessagingFrameworkConstant.STATUS_CODES.Error){
+                Repository.newInstance().setMessageError("Problem ne server!");
+            }else if (message.getStatusCode() == MessagingFrameworkConstant.STATUS_CODES.ConnectionTimedOut){
+                Repository.newInstance().setMessageError("Lidhja u nderpre!");
+            }
+
+            message.setData(null);
+            message.setAction(Repository.newInstance().getAction());
         }
+
+        Repository.newInstance().setStatusCode(message.getStatusCode());
 
         return message;
     }
@@ -92,7 +105,7 @@ public class SenderBridge {
         };
         SendRequest sendRequest = new SendRequest(urlConnection, receiverBridgeInterface);
 
-
+        Repository.newInstance().setAction(request.getAction());
 
         sendRequest.execute(Serializer.toJson(request));
 

@@ -15,7 +15,23 @@ public class Constants {
     public static boolean IS_CORPORATE = false;
     public static String ANNOYING_PROJECTS_STORY_PREF = "annoying_shared_prefs";
 
+    public static final int Success = 200;
+    public static final int Confirmation = 600;
+    public static final int ConfirmationWithInput = 601;
+    public static final int Warning = 400;
+    public static final int WarningAndRefreshPage = 440;
+    public static final int ConnectionFailed = 408;
+    public static final int ConnectionTimedOut = 700; //409;
+    public static final int InvalidAction = 300;
+    public static final int Error = 503;
+    public static final int WarningWithoutAlert = 220;
+    public static final int Inform = 210;
+    public static final int SwitchToHttp = 101;
+    public static final int MobileSignatureDelay=221;
+    public static final int SecureLogOff=701;
+
     public static class Application {
+
 
        // public static final String APP_VERSION = BuildConfig.VERSION_NAME;
         public static final int CONNECTION_TIMEOUT = 30000;

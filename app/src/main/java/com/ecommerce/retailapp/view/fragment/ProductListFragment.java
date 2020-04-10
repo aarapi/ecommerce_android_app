@@ -96,7 +96,7 @@ public class ProductListFragment extends Fragment {
                 Utils.switchFragmentWithAnimation(R.id.frag_container,
                         new ProductDetailsFragment(subcategoryKey, position, false),
                         ((ECartHomeActivity) (getContext())), null,
-                        AnimationType.SLIDE_LEFT);
+                        AnimationType.SLIDE_IN_SLIDE_OUT);
 
             }
         });

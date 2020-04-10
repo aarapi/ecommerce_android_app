@@ -212,6 +212,10 @@ public class Message extends JsonData {
         return action;
     }
 
+    public void setAction(int action) {
+        this.action = action;
+    }
+
     /**
      * Returns the action-specific {@link #data} in this message as an ArrayList.
      *

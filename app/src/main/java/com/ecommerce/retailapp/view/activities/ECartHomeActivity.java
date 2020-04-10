@@ -18,7 +18,9 @@ import android.os.Bundle;
 
 import com.ecommerce.retailapp.domain.mock.CheckSetup;
 import com.ecommerce.retailapp.view.fragment.OrderExecuteBootomFragment;
+import com.example.connectionframework.requestframework.constants.Constants;
 import com.example.connectionframework.requestframework.receiver.ReceiverActivity;
+import com.example.connectionframework.requestframework.sender.Repository;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.core.content.ContextCompat;
@@ -81,7 +83,7 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
     private LinearLayout ll_retry;
     private  OrderExecuteBootomFragment orderExecuteBootomFragment;
 
-    private TextView checkOutAmount, itemCountTextView;
+    private TextView checkOutAmount, itemCountTextView, checkout;
     private TextView offerBanner;
     private AVLoadingIndicatorView progressBar;
 
@@ -89,6 +91,7 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
     private View checkout_button;
     private View order_button;
     private HomeFragment homeFragment;
+    private FrameLayout item_counter;
 
 
     @Override
@@ -131,19 +134,7 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
 
         progressBar = (AVLoadingIndicatorView) findViewById(R.id.loading_bar);
 
-        checkOutAmount.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                Utils.vibrate(getApplicationContext());
-
-                Utils.switchContent(R.id.frag_container,
-                        Utils.SHOPPING_LIST_TAG, ECartHomeActivity.this,
-                        AnimationType.SLIDE_UP);
-
-            }
-        });
+        checkOutAmount.setOnClickListener(this);
 
 
         if (itemCount != 0) {
@@ -159,32 +150,11 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
                     true);
         }
 
-        findViewById(R.id.item_counter).setOnClickListener(
-                new OnClickListener() {
+        item_counter = findViewById(R.id.item_counter);
+        item_counter.setOnClickListener(this);
 
-                    @Override
-                    public void onClick(View v) {
-
-                        Utils.vibrate(getApplicationContext());
-                        Utils.switchContent(R.id.frag_container,
-                                Utils.SHOPPING_LIST_TAG,
-                                ECartHomeActivity.this, AnimationType.SLIDE_UP);
-
-                    }
-                });
-
-        findViewById(R.id.checkout).setOnClickListener(
-                new OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-
-                        Utils.vibrate(getApplicationContext());
-
-                        choosePaymentTypeDialog(false);
-
-                    }
-                });
+        checkout = findViewById(R.id.checkout);
+        checkout.setOnClickListener(this);
 
         homeFragment = new HomeFragment();
 
@@ -447,7 +417,7 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
          orderExecuteBootomFragment =
                 OrderExecuteBootomFragment.newInstance(bundle, this, isCashPayment);
          Utils.switchFragmentWithAnimation(R.id.frag_container,orderExecuteBootomFragment,
-                 this, Utils.ORDER_EXECUTE_FRAGMENT,  AnimationType.SLIDE_DOWN);
+                 this, Utils.ORDER_EXECUTE_FRAGMENT,  AnimationType.SLIDE_UP);
     }
 
 
@@ -483,25 +453,43 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
     @Override
     public void onDataReceive(int action, final List<Object> data) {
         if (action == CheckSetup.ServerActions.ECOMMERCE_MAKE_AN_ORDER) {
-            final Bitmap bitmap = getBitmapFromVectorDrawable(R.drawable.ic_check);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    clearOrderList();
+            if (Repository.newInstance().getStatusCode() == Constants.Success) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        clearOrderList();
 
-                    orderExecuteBootomFragment.getpDialog().setTitleText(((String) data.get(0)))
-                            .setConfirmText("OK").setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                        @Override
-                        public void onClick(SweetAlertDialog sweetAlertDialog) {
-                            orderExecuteBootomFragment.getpDialog().dismissWithAnimation();
-                            orderExecuteBootomFragment.dismiss();
-                        }
-                    })
-                            .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                        orderExecuteBootomFragment.getpDialog().setTitleText(((String) data.get(0)))
+                                .setConfirmText("OK").setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                orderExecuteBootomFragment.getpDialog().dismissWithAnimation();
+                                orderExecuteBootomFragment.dismiss();
+                            }
+                        })
+                                .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
 
-                    CenterRepository.getCenterRepository().setListOfProductsInShoppingList(new ArrayList<Product>());
-                }
-            });
+                        CenterRepository.getCenterRepository().setListOfProductsInShoppingList(new ArrayList<Product>());
+                    }
+                });
+            }else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        clearOrderList();
+
+                        orderExecuteBootomFragment.getpDialog().setTitleText(Repository.newInstance().getMessageError())
+                                .setConfirmText("OK").setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                orderExecuteBootomFragment.getpDialog().dismissWithAnimation();
+                                orderExecuteBootomFragment.dismiss();
+                            }
+                        })
+                                .changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                    }
+                });
+            }
         }else if (action == CheckSetup.ServerActions.ECOMMERCE_LIST_OF_SEARCHED_PRODUCTS){
             HomeFragment homeFragment = null;
             for (int i =0 ; i<getSupportFragmentManager().getFragments().size(); i++ ){
@@ -526,8 +514,27 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
                     .detach(currentFragment)
                     .attach(currentFragment)
                     .commit();
-            rl_error_server.setVisibility(View.GONE);
+        }else if (view == checkOutAmount){
+
+            Utils.vibrate(getApplicationContext());
+
+            Utils.switchContent(R.id.frag_container,
+                    Utils.SHOPPING_LIST_TAG, ECartHomeActivity.this,
+                    AnimationType.SLIDE_UP);
+
+        }else if (view == item_counter){
+            Utils.vibrate(getApplicationContext());
+            Utils.switchContent(R.id.frag_container,
+                    Utils.SHOPPING_LIST_TAG,
+                    ECartHomeActivity.this, AnimationType.SLIDE_UP);
+        }else if (view == checkout){
+
+            Utils.vibrate(getApplicationContext());
+            choosePaymentTypeDialog(false);
         }
+
+        rl_error_server.setVisibility(View.GONE);
+
     }
 
     public  Bitmap getBitmapFromVectorDrawable(int drawableId) {

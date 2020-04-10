@@ -11,6 +11,8 @@ package com.example.connectionframework.requestframework.sender;
 public class Repository {
     private static Repository repository;
     private String messageError;
+    private int statusCode;
+    private int action;
     private Repository() {
     }
 
@@ -27,5 +29,21 @@ public class Repository {
 
     public void setMessageError(String messageError) {
         this.messageError = messageError;
+    }
+
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    public int getAction() {
+        return action;
+    }
+
+    public void setAction(int action) {
+        this.action = action;
     }
 }
