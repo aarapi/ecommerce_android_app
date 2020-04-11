@@ -18,7 +18,10 @@ import java.util.List;
 
 public class RequestFunction {
 
-
+    public static Request getAllProductsOffline(){
+        List<Object> params = new ArrayList<>();
+        return RequestFunctions.createRequest(CheckSetup.ServerActions.ECOMMERCE_PRODUCTS_OFFLINE, params);
+    }
 
     public static Request getCategories(){
         List<Object> params = new ArrayList<>();

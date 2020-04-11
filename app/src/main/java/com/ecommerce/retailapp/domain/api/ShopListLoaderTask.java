@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ecommerce.retailapp.R;
 import com.ecommerce.retailapp.domain.mock.FakeWebServer;
 import com.ecommerce.retailapp.model.CenterRepository;
+import com.ecommerce.retailapp.model.entities.ShopModel;
 import com.ecommerce.retailapp.utils.AppConstants;
 import com.ecommerce.retailapp.utils.Utils;
 import com.ecommerce.retailapp.utils.Utils.AnimationType;
@@ -24,6 +25,8 @@ import com.ecommerce.retailapp.view.activities.ECartHomeActivity;
 import com.ecommerce.retailapp.view.adapters.ShopListAdapter;
 import com.ecommerce.retailapp.view.fragment.ProductOverviewFragment;
 import com.example.connectionframework.requestframework.sender.Repository;
+
+import java.util.ArrayList;
 
 /**
  * The Class ImageLoaderTask.
@@ -45,8 +48,7 @@ public class ShopListLoaderTask extends AsyncTask<String, Void, Void> {
 
         super.onPreExecute();
 
-        if (null != ((ECartHomeActivity) context).getProgressBar()
-                && CenterRepository.getCenterRepository().getListOfShop().size() == 0)
+        if (null != ((ECartHomeActivity) context).getProgressBar())
             ((ECartHomeActivity) context).getProgressBar().setVisibility(
                     View.VISIBLE);
     }
@@ -58,6 +60,8 @@ public class ShopListLoaderTask extends AsyncTask<String, Void, Void> {
         if (null != ((ECartHomeActivity) context).getProgressBar())
             ((ECartHomeActivity) context).getProgressBar().setVisibility(
                     View.GONE);
+
+
 
         if(CenterRepository.getCenterRepository().getListOfShop() != null) {
             if (recyclerView != null) {
@@ -95,12 +99,21 @@ public class ShopListLoaderTask extends AsyncTask<String, Void, Void> {
 
     @Override
     protected Void doInBackground(String... params) {
+        setListOfShop();
+        return null;
+    }
 
-        if(CenterRepository.getCenterRepository().getListOfShop().size() == 0) {
-            FakeWebServer.getFakeWebServer().getAllShopList(AppConstants.CURRENT_CATEGORY,context);
+    public void setListOfShop(){
+         ArrayList<ShopModel> shopsOfCategory = new ArrayList<>();
+        int size = CenterRepository.getCenterRepository().getListOfShop().size();
+        for (int i =0; i< size; i++){
+            if (CenterRepository.getCenterRepository().getListOfShop().get(i).getCategoryName()
+                    .equals(CenterRepository.getCenterRepository().getListOfCategory().get(AppConstants.CURRENT_CATEGORY).getProductCategoryName())){
+                shopsOfCategory.add(CenterRepository.getCenterRepository().getListOfShop().get(i));
+            }
         }
 
-        return null;
+        CenterRepository.getCenterRepository().setShopsOfCategory(shopsOfCategory);
     }
 
 }

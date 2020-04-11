@@ -52,7 +52,6 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_product_category, container, false);
-        CenterRepository.getCenterRepository().setListOfCategory(new ArrayList<ProductCategoryModel>());
 
         view.findViewById(R.id.search_item).setOnClickListener(
                 new OnClickListener() {
@@ -60,9 +59,13 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                        searchFragment = new SearchProductFragment(getContext());
-                        searchFragment.show(getFragmentManager(),
-                                OrderExecuteBootomFragment.TAG);
+                        if (CenterRepository.getCenterRepository().getMapAllProducts() != null) {
+                            searchFragment = new SearchProductFragment(getContext(), true);
+                            searchFragment.show(getFragmentManager(),
+                                    OrderExecuteBootomFragment.TAG);
+                        }else{
+                            Toast.makeText(getContext(), "Kontrolloni Lidhjen me rrjetin", Toast.LENGTH_SHORT).show();
+                        }
 
                     }
                 });

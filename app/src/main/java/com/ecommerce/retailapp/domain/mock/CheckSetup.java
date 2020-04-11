@@ -20,6 +20,7 @@ public class CheckSetup {
         public static int ECOMMERCE_MAKE_AN_ORDER = 2;
         public static final int ECOMMERCE_LIST_OF_SHOPS = 3;
         public static final int ECOMMERCE_LIST_OF_SEARCHED_PRODUCTS = 4;
+        public static final int ECOMMERCE_PRODUCTS_OFFLINE = 5;
 
     }
 

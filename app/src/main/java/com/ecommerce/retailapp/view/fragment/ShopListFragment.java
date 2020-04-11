@@ -53,7 +53,6 @@ public class ShopListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_product_category, container, false);
-        CenterRepository.getCenterRepository().setListOfShop(new ArrayList<ShopModel>());
 
         view.findViewById(R.id.search_item).setVisibility(View.GONE);
 

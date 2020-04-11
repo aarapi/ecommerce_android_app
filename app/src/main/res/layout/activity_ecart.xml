@@ -86,15 +86,15 @@
             </LinearLayout>
         </RelativeLayout>
 
-        <com.wang.avi.AVLoadingIndicatorView
+        <ProgressBar
             android:id="@+id/loading_bar"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
             android:visibility="visible"
-            app:indicator="LineScaleParty"
-            app:indicator_color="#F53700" />
+
+            />
 
         <include
             android:id="@+id/checkout_button"

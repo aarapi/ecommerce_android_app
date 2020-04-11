@@ -14,49 +14,46 @@
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
-    <View
-        android:layout_width="40dp"
-        android:layout_height="5dp"
-        android:background="@color/color_gray_light"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="10dp"></View>
-
 
 
     <RelativeLayout
         android:id="@+id/search_root"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp">
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/edt_search_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:layout_toLeftOf="@+id/btn_search"
+            android:layout_toLeftOf="@+id/tv_cancel"
             android:background="@drawable/rounder_rectangle_visa_card"
             android:hapticFeedbackEnabled="true"
             android:hint="Kerko produktin"
+            android:drawableLeft="@drawable/ic_search"
+            android:drawablePadding="5dp"
             android:marqueeRepeatLimit="marquee_forever"
             android:padding="5dp"
             android:singleLine="true"
             android:textColor="@color/holo_gray_dark"
             android:textColorHint="@color/color_gray_light"
-            android:textSize="20sp" />
+            android:textSize="15dp" />
 
-        <ImageButton
-            android:id="@+id/btn_search"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_centerVertical="true"
-            android:background="@null"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_action_search" />
+            android:textSize="15dp"
+            android:textColor="@color/color_black"
+            android:text="Cancel"
+            android:foreground="?attr/selectableItemBackground"
+            android:clickable="true"
+
+            />
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView

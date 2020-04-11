@@ -87,6 +87,18 @@ public class Product extends BaseJsonModel {
         this.productId = orderId;
     }
 
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
+
+    public void setSubCategoryName(String subCategoryName) {
+        this.subCategoryName = subCategoryName;
+    }
+
     public String __type = getClass().getSimpleName();
 
     public String getSubCategoryName() {

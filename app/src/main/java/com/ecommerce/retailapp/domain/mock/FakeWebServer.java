@@ -60,14 +60,30 @@ public class FakeWebServer {
     public void addCategory(Context context) {
 
         Type founderListType = new TypeToken<ArrayList<ProductCategoryModel>>(){}.getType();
+        Type founderShopType = new TypeToken<ArrayList<ShopModel>>(){}.getType();
+        Type founderProductMap = new TypeToken<ConcurrentHashMap<String, ArrayList<Product>>>(){}.getType();
+
+        ConcurrentHashMap<String, ArrayList<Product>> productMap =
+                new ConcurrentHashMap<String, ArrayList<Product>>();
+
         senderBridge = new SenderBridge(context);
 
-        data = senderBridge.sendMessage(RequestFunction.getCategories());
+        data = senderBridge.sendMessage(RequestFunction.getAllProductsOffline());
 
         if (data !=null) {
             ArrayList<ProductCategoryModel> productCategoryModels = gson.fromJson(gson.toJson(data.get(0)),
                     founderListType);
             CenterRepository.getCenterRepository().setListOfCategory(productCategoryModels);
+
+            ArrayList<ShopModel> shopList = gson.fromJson(gson.toJson(data.get(1)),
+                    founderShopType);
+
+            CenterRepository.getCenterRepository().setListOfShop(shopList);
+
+            productMap = gson.fromJson(gson.toJson(data.get(2)), founderProductMap);
+
+            CenterRepository.getCenterRepository().setMapAllProducts(productMap);
+
         }else
             CenterRepository.getCenterRepository().setListOfCategory(null);
     }
@@ -84,8 +100,6 @@ public class FakeWebServer {
 
         if (data != null) {
             productMap = gson.fromJson(gson.toJson(data.get(0)), founderListType);
-
-            CenterRepository.getCenterRepository().setListOfSearchedProducts(productMap.get("Detergjente"));
 
             CenterRepository.getCenterRepository().setMapOfProductsInCategory(productMap);
         }else

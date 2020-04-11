@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +23,7 @@ import com.ecommerce.retailapp.R;
 import com.ecommerce.retailapp.model.CenterRepository;
 import com.ecommerce.retailapp.model.entities.ProductCategoryModel;
 import com.ecommerce.retailapp.model.entities.ShopModel;
+import com.ecommerce.retailapp.utils.AppConstants;
 import com.ecommerce.retailapp.utils.ColorGenerator;
 import com.ecommerce.retailapp.view.customview.LabelView;
 import com.ecommerce.retailapp.view.customview.TextDrawable;
@@ -43,7 +45,7 @@ public class ShopListAdapter extends
 
     public ShopListAdapter(Context context) {
 
-        shopModelList = CenterRepository.getCenterRepository().getListOfShop();
+        shopModelList = getListOfShop();
 
         this.context = context;
     }
@@ -128,6 +130,20 @@ public class ShopListAdapter extends
         public void onClick(View v) {
             clickListener.onItemClick(v, getPosition());
         }
+    }
+
+    private ArrayList<ShopModel> getListOfShop(){
+        ArrayList<ShopModel> shopList = new ArrayList<>();
+       int size =  CenterRepository.getCenterRepository().getListOfShop().size();
+
+       for (int i =0; i< size; i++){
+           if (CenterRepository.getCenterRepository().getListOfShop().get(i).getCategoryName()
+                   .equals(CenterRepository.getCenterRepository().getListOfCategory().get(AppConstants.CURRENT_CATEGORY).getProductCategoryName())){
+               shopList.add(CenterRepository.getCenterRepository().getListOfShop().get(i));
+           }
+       }
+
+       return shopList;
     }
 
 }

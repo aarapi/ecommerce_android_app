@@ -39,6 +39,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -85,7 +86,7 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
 
     private TextView checkOutAmount, itemCountTextView, checkout;
     private TextView offerBanner;
-    private AVLoadingIndicatorView progressBar;
+    private ProgressBar progressBar;
 
     private NavigationView mNavigationView;
     private View checkout_button;
@@ -132,7 +133,7 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
         mDrawerLayout = (DrawerLayout) findViewById(R.id.nav_drawer);
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
 
-        progressBar = (AVLoadingIndicatorView) findViewById(R.id.loading_bar);
+        progressBar = findViewById(R.id.loading_bar);
 
         checkOutAmount.setOnClickListener(this);
 
@@ -219,7 +220,7 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
 
     }
 
-    public AVLoadingIndicatorView getProgressBar() {
+    public ProgressBar getProgressBar() {
         return progressBar;
     }
 
@@ -416,7 +417,7 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
 
          orderExecuteBootomFragment =
                 OrderExecuteBootomFragment.newInstance(bundle, this, isCashPayment);
-         Utils.switchFragmentWithAnimation(R.id.frag_container,orderExecuteBootomFragment,
+         Utils.addFragmentWithAnimation(R.id.frag_container,orderExecuteBootomFragment,
                  this, Utils.ORDER_EXECUTE_FRAGMENT,  AnimationType.SLIDE_UP);
     }
 
@@ -499,7 +500,6 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
                     continue;
                 }
             }
-            homeFragment.getSearchFragment().onDataReceive(data);
         }
 
 

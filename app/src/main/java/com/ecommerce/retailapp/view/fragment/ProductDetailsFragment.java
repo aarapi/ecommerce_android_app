@@ -51,6 +51,7 @@ import java.math.BigDecimal;
  */
 public class ProductDetailsFragment extends Fragment implements OnClickListener {
 
+
     private int productListNumber;
     private ImageView itemImage;
     private  ImageView iv_back;
@@ -191,7 +192,8 @@ public class ProductDetailsFragment extends Fragment implements OnClickListener 
                                                         .getSellMRP())), true);
 
                                 // update current item quanitity
-                                quanitity.setText(tempObj.getQuantity());
+
+                                    quanitity.setText(tempObj.getQuantity());
 
                             } else {
 
@@ -397,9 +399,7 @@ public class ProductDetailsFragment extends Fragment implements OnClickListener 
                     .getMapOfProductsInCategory().get(subcategoryKey).get(productListNumber)
                     .getItemName());
 
-            quanitity.setText(CenterRepository.getCenterRepository()
-                    .getMapOfProductsInCategory().get(subcategoryKey).get(productListNumber)
-                    .getQuantity());
+            quanitity.setText("0");
 
             itemdescription.setText(CenterRepository.getCenterRepository()
                     .getMapOfProductsInCategory().get(subcategoryKey).get(productListNumber)
@@ -581,10 +581,7 @@ public class ProductDetailsFragment extends Fragment implements OnClickListener 
                     AnimationType.SLIDE_UP);
         } else {
 
-            Utils.switchContent(R.id.frag_container,
-                    Utils.PRODUCT_OVERVIEW_FRAGMENT_TAG,
-                    ((ECartHomeActivity) (getActivity())),
-                    AnimationType.SLIDE_RIGHT);
+            getActivity().onBackPressed();
         }
 
     }

@@ -93,7 +93,7 @@ public class ProductListFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
 
-                Utils.switchFragmentWithAnimation(R.id.frag_container,
+                Utils.addFragmentWithAnimation(R.id.frag_container,
                         new ProductDetailsFragment(subcategoryKey, position, false),
                         ((ECartHomeActivity) (getContext())), null,
                         AnimationType.SLIDE_IN_SLIDE_OUT);

@@ -27,10 +27,16 @@
     <style name="TabLayout_Theme" parent="@style/MyTheme">
         <item name="android:singleLine">true</item>
     </style>
-    <style name="foodRatingBar" parent="@android:style/Widget.RatingBar">
-        <item name="android:progressDrawable">@drawable/ratingstars</item>
-        <item name="android:minHeight">22dip</item>
-        <item name="android:maxHeight">22dip</item>
+
+
+    <style name="AppBottomSheetDialogTheme"
+        parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+    </style>
+
+    <style name="AppModalStyle"
+        parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/rounded_top</item>
     </style>
 
 </resources>

@@ -4,6 +4,8 @@ package com.ecommerce.retailapp.domain.api;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.ecommerce.retailapp.model.entities.Product;
+import com.ecommerce.retailapp.model.entities.ShopModel;
 import com.example.connectionframework.requestframework.sender.Repository;
 import com.google.android.material.tabs.TabLayout;
 import androidx.viewpager.widget.ViewPager;
@@ -17,7 +19,9 @@ import com.ecommerce.retailapp.view.activities.ECartHomeActivity;
 import com.ecommerce.retailapp.view.adapters.ProductsInCategoryPagerAdapter;
 import com.ecommerce.retailapp.view.fragment.ProductListFragment;
 
+import java.util.ArrayList;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The Class ImageLoaderTask.
@@ -28,6 +32,7 @@ public class ProductLoaderTask extends AsyncTask<String, Void, Void> {
     private ViewPager viewPager;
     private TabLayout tabs;
     private RecyclerView recyclerView;
+    private ArrayList<ShopModel> listOfShop = new ArrayList<>();
 
     public ProductLoaderTask(RecyclerView listView, Context context,
                              ViewPager viewpager, TabLayout tabs) {
@@ -53,9 +58,11 @@ public class ProductLoaderTask extends AsyncTask<String, Void, Void> {
 
         super.onPreExecute();
 
-        if (null != ((ECartHomeActivity) context).getProgressBar())
+        if (null != ((ECartHomeActivity) context).getProgressBar()) {
             ((ECartHomeActivity) context).getProgressBar().setVisibility(
                     View.VISIBLE);
+        }
+
 
     }
 
@@ -67,7 +74,7 @@ public class ProductLoaderTask extends AsyncTask<String, Void, Void> {
             ((ECartHomeActivity) context).getProgressBar().setVisibility(
                     View.GONE);
 
-        if(CenterRepository.getCenterRepository().getMapOfProductsInCategory() != null) {
+        if(CenterRepository.getCenterRepository().getMapAllProducts() != null) {
             setUpUi();
         }else {
             if (null != ((ECartHomeActivity) context).getRl_error_server()) {
@@ -82,11 +89,7 @@ public class ProductLoaderTask extends AsyncTask<String, Void, Void> {
 
     @Override
     protected Void doInBackground(String... params) {
-
-        if (CenterRepository.getCenterRepository().getMapOfProductsInCategory().size() == 0) {
-            FakeWebServer.getFakeWebServer().getAllProducts(AppConstants.CURRENT_SHOP, context);
-        }
-
+        setProducstOfShop();
         return null;
     }
 
@@ -102,8 +105,7 @@ public class ProductLoaderTask extends AsyncTask<String, Void, Void> {
         ProductsInCategoryPagerAdapter adapter = new ProductsInCategoryPagerAdapter(
                 ((ECartHomeActivity) context).getSupportFragmentManager());
 
-        Set<String> keys = CenterRepository.getCenterRepository().getMapOfProductsInCategory()
-                .keySet();
+        Set<String> keys = CenterRepository.getCenterRepository().getMapOfProductsInCategory().keySet();
 
         for (String string : keys) {
 
@@ -123,5 +125,29 @@ public class ProductLoaderTask extends AsyncTask<String, Void, Void> {
                     View.VISIBLE);
 
     }
+
+
+    private void setProducstOfShop(){
+        ConcurrentHashMap<String, ArrayList<Product>> mapOfProductsInCategory = new ConcurrentHashMap<>();
+        Set<String> keys =  CenterRepository.getCenterRepository().getMapAllProducts().keySet();
+
+        for (String string : keys) {
+            ArrayList<Product> products = new ArrayList<>();
+            int sizeOfProducts = CenterRepository.getCenterRepository().getMapAllProducts().get(string).size();
+            for (int i = 0; i < sizeOfProducts; i++){
+                if (CenterRepository.getCenterRepository().getMapAllProducts().get(string).get(i).getShopName()
+                        .equals(CenterRepository.getCenterRepository().getShopsOfCategory().get(AppConstants.CURRENT_SHOP).getShopName())){
+                    products.add(CenterRepository.getCenterRepository().getMapAllProducts().get(string).get(i));
+                }
+            }
+            if(products.size() > 0)
+            mapOfProductsInCategory.put(string, products);
+        }
+
+        CenterRepository.getCenterRepository().setMapOfProductsInCategory(mapOfProductsInCategory);
+
+    }
+
+
 
 }

@@ -278,7 +278,74 @@ public class Utils {
         fragmentTransaction.addToBackStack(TAG);
         fragmentTransaction.commit();
     }
+    public static void addFragmentWithAnimation(int id, Fragment fragment,
+                                                   FragmentActivity activity, String TAG, AnimationType transitionStyle) {
 
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager
+                .beginTransaction();
+
+        if (transitionStyle != null) {
+            switch (transitionStyle) {
+                case SLIDE_DOWN:
+
+                    // Exit from down
+                    fragmentTransaction.setCustomAnimations(R.anim.slide_up,
+                            R.anim.slide_down);
+
+                    break;
+
+                case SLIDE_UP:
+
+                    // Enter from Up
+                    fragmentTransaction.setCustomAnimations(R.anim.slide_in_up,
+                            R.anim.slide_out_up);
+
+                    break;
+
+                case SLIDE_LEFT:
+
+                    // Enter from left
+                    fragmentTransaction.setCustomAnimations(R.anim.slide_left,
+                            R.anim.slide_out_left);
+
+                    break;
+
+                // Enter from right
+                case SLIDE_RIGHT:
+                    fragmentTransaction.setCustomAnimations(R.anim.slide_right,
+                            R.anim.slide_out_right);
+
+                    break;
+
+                case FADE_IN:
+                    fragmentTransaction.setCustomAnimations(R.anim.fade_in,
+                            R.anim.fade_out);
+
+                case FADE_OUT:
+                    fragmentTransaction.setCustomAnimations(R.anim.fade_in,
+                            R.anim.donot_move);
+
+                    break;
+
+                case SLIDE_IN_SLIDE_OUT:
+
+                    fragmentTransaction.setCustomAnimations(R.anim.slide_left,
+                            R.anim.slide_out_left);
+
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        CURRENT_TAG = TAG;
+
+        fragmentTransaction.add(id, fragment);
+        fragmentTransaction.addToBackStack(TAG);
+        fragmentTransaction.commit();
+    }
     public static void switchContent(int id, String TAG,
                                      FragmentActivity baseActivity, AnimationType transitionStyle) {
 

@@ -39,7 +39,7 @@ public class ProductCategoryLoaderTask extends AsyncTask<String, Void, Void> {
         super.onPreExecute();
 
         if (null != ((ECartHomeActivity) context).getProgressBar()
-                && CenterRepository.getCenterRepository().getListOfCategory().size() == 0)
+                && CenterRepository.getCenterRepository().getListOfCategory() == null)
             ((ECartHomeActivity) context).getProgressBar().setVisibility(
                     View.VISIBLE);
     }
@@ -89,7 +89,7 @@ public class ProductCategoryLoaderTask extends AsyncTask<String, Void, Void> {
     @Override
     protected Void doInBackground(String... params) {
 
-        if(CenterRepository.getCenterRepository().getListOfCategory().size() == 0) {
+        if(CenterRepository.getCenterRepository().getListOfCategory() == null) {
             FakeWebServer.getFakeWebServer().addCategory(context);
         }
 
