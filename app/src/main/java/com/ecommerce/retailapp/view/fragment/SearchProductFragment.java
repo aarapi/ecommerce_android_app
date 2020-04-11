@@ -29,6 +29,8 @@ import com.ecommerce.retailapp.R;
 import com.ecommerce.retailapp.model.CenterRepository;
 import com.ecommerce.retailapp.model.entities.Product;
 import com.ecommerce.retailapp.utils.AppConstants;
+import com.ecommerce.retailapp.utils.Utils;
+import com.ecommerce.retailapp.view.activities.ECartHomeActivity;
 import com.ecommerce.retailapp.view.adapters.ProductListAdapter;
 import com.example.connectionframework.requestframework.sender.Repository;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -96,7 +98,7 @@ public class SearchProductFragment extends BottomSheetDialogFragment implements 
 
             @Override
             public void onClick(View v) {
-              dismiss();
+                dismiss();
             }
         });
 
@@ -112,7 +114,19 @@ public class SearchProductFragment extends BottomSheetDialogFragment implements 
         if (CenterRepository.getCenterRepository().getListOfSearchedProducts() != null) {
             ProductListAdapter adapter = new ProductListAdapter(getContext());
             recyclerView.setAdapter(adapter);
+            adapter.SetOnItemClickListener(new ProductListAdapter.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(View view, int position) {
+//                    Utils.addFragmentWithAnimation(R.id.frag_container,
+//                            new ProductDetailsFragment("", position, false),
+//                            ((ECartHomeActivity) (getContext())), null,
+//                            Utils.AnimationType.SLIDE_IN_SLIDE_OUT);
+
+                }
+            });
             adapter.notifyDataSetChanged();
+
             recyclerView.setVisibility(View.VISIBLE);
         }else {
             rl_error_server.setVisibility(View.VISIBLE);
@@ -140,11 +154,11 @@ public class SearchProductFragment extends BottomSheetDialogFragment implements 
                             searchedProducts.add(products.get(j));
                         }
                     }else {
-                    if (products.get(j).getItemName().toLowerCase().contains(searchString.toLowerCase())
-                            && products.get(j).getShopName().equals(CenterRepository.getCenterRepository()
-                            .getShopsOfCategory().get(AppConstants.CURRENT_SHOP).getShopName())){
-                        searchedProducts.add(products.get(j));
-                    }
+                        if (products.get(j).getItemName().toLowerCase().contains(searchString.toLowerCase())
+                                && products.get(j).getShopName().equals(CenterRepository.getCenterRepository()
+                                .getShopsOfCategory().get(AppConstants.CURRENT_SHOP).getShopName())){
+                            searchedProducts.add(products.get(j));
+                        }
                     }
                 }
             }
