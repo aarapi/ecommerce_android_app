@@ -29,6 +29,9 @@ public class CenterRepository {
     private ConcurrentHashMap<String, ArrayList<Product>> mapAllProducts;
     private List<Product> listOfProductsInShoppingList = Collections.synchronizedList(new ArrayList<Product>());
     private ArrayList<ShopModel> listOfShop = new ArrayList<>();
+    private ArrayList<Product> listOfStoryProducts = new ArrayList<>();
+    private ArrayList<Product> adsProducts = new ArrayList<>();
+    private ArrayList<ShopModel> listOfSearchedShops = new ArrayList<>();
     private ArrayList<ShopModel> shopsOfCategory = new ArrayList<>();
     private List<Product> listOfSearchedProducts = new ArrayList<>();
     private List<Set<String>> listOfItemSetsForDataMining = new ArrayList<>();
@@ -106,5 +109,29 @@ public class CenterRepository {
 
     public void setShopsOfCategory(ArrayList<ShopModel> shopsOfCategory) {
         this.shopsOfCategory = shopsOfCategory;
+    }
+
+    public ArrayList<ShopModel> getListOfSearchedShops() {
+        return listOfSearchedShops;
+    }
+
+    public void setListOfSearchedShops(ArrayList<ShopModel> listOfSearchedShops) {
+        this.listOfSearchedShops = listOfSearchedShops;
+    }
+
+    public ArrayList<Product> getListOfStoryProducts() {
+        return listOfStoryProducts;
+    }
+
+    public void setListOfStoryProducts(ArrayList<Product> listOfStoryProducts) {
+        this.listOfStoryProducts = listOfStoryProducts;
+    }
+
+    public ArrayList<Product> getAdsProducts() {
+        return adsProducts;
+    }
+
+    public void setAdsProducts(ArrayList<Product> adsProducts) {
+        this.adsProducts = adsProducts;
     }
 }

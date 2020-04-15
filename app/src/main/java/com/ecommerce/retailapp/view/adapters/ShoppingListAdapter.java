@@ -96,7 +96,7 @@ public class ShoppingListAdapter extends
                 BigDecimal.valueOf(Long.valueOf(productList.get(position)
                         .getMRP()))).toString();
 
-        String costString = sellCostString + buyMRP;
+        String costString = sellCostString;
 
         holder.itemCost.setText(costString, BufferType.SPANNABLE);
 
@@ -167,7 +167,7 @@ public class ShoppingListAdapter extends
             public void onClick(View v) {
 
                 if (Integer.valueOf(CenterRepository.getCenterRepository()
-                        .getListOfProductsInShoppingList().get(position).getQuantity()) > 2) {
+                        .getListOfProductsInShoppingList().get(position).getQuantity()) > 1) {
 
                     CenterRepository
                             .getCenterRepository()
@@ -202,6 +202,8 @@ public class ShoppingListAdapter extends
 
                     CenterRepository.getCenterRepository().getListOfProductsInShoppingList()
                             .remove(position);
+                    notifyDataSetChanged();
+
 
                     if (Integer.valueOf(((ECartHomeActivity) context)
                             .getItemCount()) == 0) {

@@ -8,14 +8,15 @@
   -->
 
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="oval">
+    android:shape="rectangle">
 
-    <corners android:radius="10dip" />
+    <corners android:topLeftRadius="10dp"
+        android:bottomRightRadius="10dp"/>
 
     <stroke
         android:width="2dip"
-        android:color="#03A14D" />
+        android:color="@color/primary" />
 
-    <solid android:color="#fff" />
+    <solid android:color="@color/primary" />
 
 </shape>

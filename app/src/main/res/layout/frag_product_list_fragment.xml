@@ -8,6 +8,7 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:shimmer="http://schemas.android.com/apk/res-auto"
     android:id="@+id/dummyfrag_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,12 +18,13 @@
     <RelativeLayout
         android:id="@+id/slide_down"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="?attr/actionBarSize"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="3dp"
-        android:background="#03A14D"
-        android:visibility="gone">
+        android:background="@color/primary"
+        android:visibility="gone"
+       >
 
         <ImageView
             android:id="@+id/slider"
@@ -43,7 +45,7 @@
             android:shadowDx="1"
             android:shadowDy="1"
             android:shadowRadius="1"
-            android:text="Continue Shopping"
+            android:text="Vazhdoni Blerjen"
             android:textColor="@color/white"
             android:textSize="20sp" />
     </RelativeLayout>
@@ -52,6 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/slide_down">
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/product_list_recycler_view"
@@ -94,7 +97,7 @@
                         android:marqueeRepeatLimit="marquee_forever"
                         android:scrollHorizontally="true"
                         android:singleLine="true"
-                        android:text="Your cart is Empty"
+                        android:text="Shporta juaj eshte bosh"
                         android:textColor="@color/white"
                         android:textSize="25sp" />
 
@@ -115,7 +118,7 @@
                         android:marqueeRepeatLimit="marquee_forever"
                         android:scrollHorizontally="true"
                         android:singleLine="true"
-                        android:text="Lets fill it by shopping new items"
+                        android:text="Mbusheni me produkte"
                         android:textSize="20sp" />
 
                     <Button
@@ -126,9 +129,9 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_marginTop="20dp"
-                        android:background="#03A14D"
+                        android:background="@color/secondary_color"
                         android:gravity="center_horizontal|center_vertical"
-                        android:text="START SHOPPING"
+                        android:text="VAZHDONI BLERJEN"
                         android:textColor="@color/white"
                         android:textSize="25sp" />
                 </LinearLayout>

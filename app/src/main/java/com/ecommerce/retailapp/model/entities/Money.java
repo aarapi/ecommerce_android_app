@@ -10,6 +10,7 @@ package com.ecommerce.retailapp.model.entities;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Currency;
 import java.util.Locale;
 
@@ -48,7 +49,10 @@ public class Money {
 
     @Override
     public String toString() {
-        return getCurrency().getSymbol() + " " + getAmount();
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        decimalFormat.setGroupingUsed(true);
+        decimalFormat.setGroupingSize(3);
+        return getCurrency().getSymbol() + " " + decimalFormat.format(getAmount().doubleValue());
     }
 
     public String toString(Locale locale) {

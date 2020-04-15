@@ -56,6 +56,7 @@ import com.ecommerce.retailapp.utils.Utils;
 import com.ecommerce.retailapp.utils.Utils.AnimationType;
 import com.ecommerce.retailapp.view.fragment.HomeFragment;
 import com.ecommerce.retailapp.view.fragment.WhatsNewDialog;
+import com.rom4ek.arcnavigationview.ArcNavigationView;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.io.Serializable;
@@ -67,6 +68,7 @@ import java.util.List;
 import java.util.Set;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import softpro.naseemali.ShapedNavigationView;
 
 
 public class ECartHomeActivity extends AppCompatActivity implements ReceiverActivity, OnClickListener {
@@ -85,7 +87,7 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
     private  OrderExecuteBootomFragment orderExecuteBootomFragment;
 
     private TextView checkOutAmount, itemCountTextView, checkout;
-    private TextView offerBanner;
+//    private TextView offerBanner;
     private ProgressBar progressBar;
 
     private NavigationView mNavigationView;
@@ -119,7 +121,7 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
 
         //	makeFakeVolleyJsonArrayRequest();
 
-        offerBanner = ((TextView) findViewById(R.id.new_offers_banner));
+//        offerBanner = ((TextView) findViewById(R.id.new_offers_banner));
 
         itemCountTextView = (TextView) findViewById(R.id.item_count);
         itemCountTextView.setSelected(true);
@@ -128,7 +130,7 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
         checkOutAmount = (TextView) findViewById(R.id.checkout_amount);
         checkOutAmount.setSelected(true);
         checkOutAmount.setText(Money.albaniaCurrency(checkoutAmount).toString());
-        offerBanner.setSelected(true);
+//        offerBanner.setSelected(true);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.nav_drawer);
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -193,13 +195,6 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
                                         AnimationType.SLIDE_LEFT);
                                 return true;
 
-//                            case R.id.apriori_result:
-//
-//                                mDrawerLayout.closeDrawers();
-//
-//                                startActivity(new Intent(ECartHomeActivity.this, APrioriResultActivity.class));
-//
-//                                return true;
 
 
                             case R.id.contact_us:
@@ -219,11 +214,6 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
                 });
 
     }
-
-    public ProgressBar getProgressBar() {
-        return progressBar;
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -312,11 +302,11 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
         if (itemCount == 0) {
 
             findViewById(R.id.checkout_item_root).setVisibility(View.GONE);
-            findViewById(R.id.new_offers_banner).setVisibility(View.VISIBLE);
+//            findViewById(R.id.new_offers_banner).setVisibility(View.VISIBLE);
 
         } else {
             findViewById(R.id.checkout_item_root).setVisibility(View.VISIBLE);
-            findViewById(R.id.new_offers_banner).setVisibility(View.GONE);
+//            findViewById(R.id.new_offers_banner).setVisibility(View.GONE);
         }
     }
 
@@ -477,14 +467,12 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        clearOrderList();
 
                         orderExecuteBootomFragment.getpDialog().setTitleText(Repository.newInstance().getMessageError())
                                 .setConfirmText("OK").setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
                             public void onClick(SweetAlertDialog sweetAlertDialog) {
                                 orderExecuteBootomFragment.getpDialog().dismissWithAnimation();
-                                orderExecuteBootomFragment.dismiss();
                             }
                         })
                                 .changeAlertType(SweetAlertDialog.ERROR_TYPE);

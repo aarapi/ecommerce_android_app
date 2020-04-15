@@ -8,6 +8,8 @@
 
 package com.ecommerce.retailapp.model.entities;
 
+import java.sql.Time;
+
 public class ShopModel {
 
     private int shopId;
@@ -15,7 +17,9 @@ public class ShopModel {
     private String shopDescription;
     private String shopImage;
     private String categoryName;
-
+    private int avalibility;
+    private Time openTime;
+    private Time closeTime;
 
     public int getShopId() {
         return shopId;
@@ -55,5 +59,29 @@ public class ShopModel {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public int getAvalibility() {
+        return avalibility;
+    }
+
+    public void setAvalibility(int avalibility) {
+        this.avalibility = avalibility;
+    }
+
+    public Time getOpenTime() {
+        return openTime;
+    }
+
+    public void setOpenTime(Time openTime) {
+        this.openTime = openTime;
+    }
+
+    public Time getCloseTime() {
+        return closeTime;
+    }
+
+    public void setCloseTime(Time closeTime) {
+        this.closeTime = closeTime;
     }
 }

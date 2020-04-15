@@ -83,12 +83,12 @@ public class CategoryListAdapter extends
                 .error(drawable)
                 .centerCrop().into(versionViewHolder.imagView);
 
-        LabelView label = new LabelView(context);
-        label.setText(categoryList.get(categoryIndex)
-                .getProductCategoryDiscount());
-        label.setBackgroundColor(0xffE91E63);
-        label.setTargetView(versionViewHolder.imagView, 10,
-                LabelView.Gravity.RIGHT_TOP);
+//        LabelView label = new LabelView(context);
+//        label.setText(categoryList.get(categoryIndex)
+//                .getProductCategoryDiscount());
+//        label.setBackgroundColor(0xffE91E63);
+//        label.setTargetView(versionViewHolder.imagView, 10,
+//                LabelView.Gravity.RIGHT_TOP);
 
     }
 

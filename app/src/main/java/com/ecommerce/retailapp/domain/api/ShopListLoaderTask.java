@@ -15,16 +15,13 @@ import android.view.View;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ecommerce.retailapp.R;
-import com.ecommerce.retailapp.domain.mock.FakeWebServer;
 import com.ecommerce.retailapp.model.CenterRepository;
 import com.ecommerce.retailapp.model.entities.ShopModel;
 import com.ecommerce.retailapp.utils.AppConstants;
 import com.ecommerce.retailapp.utils.Utils;
-import com.ecommerce.retailapp.utils.Utils.AnimationType;
 import com.ecommerce.retailapp.view.activities.ECartHomeActivity;
 import com.ecommerce.retailapp.view.adapters.ShopListAdapter;
 import com.ecommerce.retailapp.view.fragment.ProductOverviewFragment;
-import com.example.connectionframework.requestframework.sender.Repository;
 
 import java.util.ArrayList;
 
@@ -45,25 +42,12 @@ public class ShopListLoaderTask extends AsyncTask<String, Void, Void> {
 
     @Override
     protected void onPreExecute() {
-
         super.onPreExecute();
-
-        if (null != ((ECartHomeActivity) context).getProgressBar())
-            ((ECartHomeActivity) context).getProgressBar().setVisibility(
-                    View.VISIBLE);
     }
 
     @Override
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
-
-        if (null != ((ECartHomeActivity) context).getProgressBar())
-            ((ECartHomeActivity) context).getProgressBar().setVisibility(
-                    View.GONE);
-
-
-
-        if(CenterRepository.getCenterRepository().getListOfShop() != null) {
             if (recyclerView != null) {
                 ShopListAdapter simpleRecyclerAdapter = new ShopListAdapter(
                         context);
@@ -75,25 +59,18 @@ public class ShopListLoaderTask extends AsyncTask<String, Void, Void> {
 
                             @Override
                             public void onItemClick(View view, int position) {
-
                                 AppConstants.CURRENT_SHOP = position;
 
                                 Utils.switchFragmentWithAnimation(
                                         R.id.frag_container,
-                                        new ProductOverviewFragment(),
+                                        new ProductOverviewFragment( CenterRepository.getCenterRepository()
+                                                .getShopsOfCategory().get(AppConstants.CURRENT_SHOP).getShopName()),
                                         ((ECartHomeActivity) context), null,
-                                        AnimationType.SLIDE_LEFT);
+                                        Utils.AnimationType.SLIDE_LEFT);
 
                             }
                         });
             }
-        }else {
-            if (null != ((ECartHomeActivity) context).getRl_error_server()) {
-                ((ECartHomeActivity) context).getTv_error_message().setText(Repository.newInstance().getMessageError());
-                ((ECartHomeActivity) context).getRl_error_server().setVisibility(
-                        View.VISIBLE);
-            }
-        }
 
     }
 

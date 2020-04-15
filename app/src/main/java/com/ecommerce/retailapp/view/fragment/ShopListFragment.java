@@ -19,8 +19,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
@@ -29,17 +30,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ecommerce.retailapp.R;
-import com.ecommerce.retailapp.domain.api.ProductCategoryLoaderTask;
 import com.ecommerce.retailapp.domain.api.ShopListLoaderTask;
-import com.ecommerce.retailapp.model.CenterRepository;
-import com.ecommerce.retailapp.model.entities.ProductCategoryModel;
-import com.ecommerce.retailapp.model.entities.ShopModel;
+import com.ecommerce.retailapp.utils.AppConstants;
 import com.ecommerce.retailapp.utils.Utils;
 import com.ecommerce.retailapp.utils.Utils.AnimationType;
 import com.ecommerce.retailapp.view.activities.ECartHomeActivity;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-
-import java.util.ArrayList;
 
 public class ShopListFragment extends Fragment {
     int mutedColor = R.attr.colorPrimary;
@@ -47,13 +43,14 @@ public class ShopListFragment extends Fragment {
     private RecyclerView recyclerView;
 
 
+
     private Handler mHandler = new Handler();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.frag_product_category, container, false);
-
+        View view = inflater.inflate(R.layout.frag_shop_list, container, false);
+        view.findViewById(R.id.shimmer_view_container).setVisibility(View.GONE);
         view.findViewById(R.id.search_item).setVisibility(View.GONE);
 
         final Toolbar toolbar = (Toolbar) view.findViewById(R.id.anim_toolbar);
@@ -86,8 +83,8 @@ public class ShopListFragment extends Fragment {
             public void onGenerated(Palette palette) {
 
                 mutedColor = palette.getMutedColor(R.color.primary_500);
-                collapsingToolbar.setContentScrimColor(mutedColor);
-                collapsingToolbar.setStatusBarScrimColor(R.color.black_trans80);
+                collapsingToolbar.setContentScrimColor(getContext().getResources().getColor(R.color.primary));
+                collapsingToolbar.setStatusBarScrimColor(getContext().getResources().getColor(R.color.primary));
             }
         });
 
@@ -98,9 +95,6 @@ public class ShopListFragment extends Fragment {
                 getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        new ShopListLoaderTask(recyclerView, getActivity()).execute();
-
-
         view.setFocusableInTouchMode(true);
         view.requestFocus();
         view.setOnKeyListener(new View.OnKeyListener() {
@@ -110,12 +104,12 @@ public class ShopListFragment extends Fragment {
 
                 if (event.getAction() == KeyEvent.ACTION_UP
                         && keyCode == KeyEvent.KEYCODE_BACK) {
-
-
-                    Utils.switchContent(R.id.frag_container,
-                            Utils.HOME_FRAGMENT,
-                            ((ECartHomeActivity) (getContext())),
-                            AnimationType.SLIDE_RIGHT);
+                    if (!AppConstants.disableBackPress) {
+                        Utils.switchContent(R.id.frag_container,
+                                Utils.HOME_FRAGMENT,
+                                ((ECartHomeActivity) (getContext())),
+                                AnimationType.SLIDE_RIGHT);
+                    }
 
                 }
                 return true;
@@ -123,8 +117,16 @@ public class ShopListFragment extends Fragment {
         });
 
 
+
         return view;
 
     }
 
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        new ShopListLoaderTask(recyclerView, getActivity()).execute();
+    }
 }

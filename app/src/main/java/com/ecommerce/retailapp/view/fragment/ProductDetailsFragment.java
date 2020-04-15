@@ -399,7 +399,9 @@ public class ProductDetailsFragment extends Fragment implements OnClickListener 
                     .getMapOfProductsInCategory().get(subcategoryKey).get(productListNumber)
                     .getItemName());
 
-            quanitity.setText("0");
+            quanitity.setText(CenterRepository.getCenterRepository()
+                    .getMapOfProductsInCategory().get(subcategoryKey).get(productListNumber)
+                    .getQuantity());
 
             itemdescription.setText(CenterRepository.getCenterRepository()
                     .getMapOfProductsInCategory().get(subcategoryKey).get(productListNumber)

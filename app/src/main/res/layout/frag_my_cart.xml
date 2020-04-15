@@ -20,8 +20,9 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="3dp"
-        android:background="#03A14D"
-        android:visibility="gone">
+        android:background="@color/primary"
+        android:visibility="gone"
+        >
 
         <ImageView
             android:id="@+id/slider"
@@ -42,7 +43,7 @@
             android:shadowDx="1"
             android:shadowDy="1"
             android:shadowRadius="1"
-            android:text="Continue Shopping"
+            android:text="Vazhdoni blerjen"
             android:textColor="@color/white"
             android:textSize="20sp" />
     </RelativeLayout>

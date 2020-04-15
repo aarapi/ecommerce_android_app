@@ -8,6 +8,7 @@
 
 package com.ecommerce.retailapp.view.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -20,18 +21,22 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ecommerce.retailapp.R;
+import com.ecommerce.retailapp.domain.api.ProductLoaderTask;
 import com.ecommerce.retailapp.model.CenterRepository;
 import com.ecommerce.retailapp.model.entities.Product;
+import com.ecommerce.retailapp.model.entities.ShopModel;
 import com.ecommerce.retailapp.utils.AppConstants;
 import com.ecommerce.retailapp.utils.Utils;
 import com.ecommerce.retailapp.view.activities.ECartHomeActivity;
 import com.ecommerce.retailapp.view.adapters.ProductListAdapter;
+import com.ecommerce.retailapp.view.adapters.ShopListAdapterSearch;
 import com.example.connectionframework.requestframework.sender.Repository;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -53,11 +58,13 @@ public class SearchProductFragment extends BottomSheetDialogFragment implements 
     private RelativeLayout rl_error_server;
     private TextView tv_error_message, tv_cancel;
     private boolean isHome;
+    private SearchProductFragment searchProductFragment;
 
 
     private View rootView;
 
     public  SearchProductFragment (Context context, boolean isHome) {
+        searchProductFragment = this;
         this.isHome = isHome;
         this.context = context;
     }
@@ -90,14 +97,20 @@ public class SearchProductFragment extends BottomSheetDialogFragment implements 
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
 
-        setSearchProductList(null);
-        getSearchedProducts();
-
+        if (isHome){
+            serchInput.setHint("Kerko dyqanin");
+            setSearchedShop(null);
+            getSearchedShops();
+        }else {
+            setSearchProductList(null);
+            getSearchedProducts();
+        }
 
         tv_cancel.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
+                hideKeyboard(context);
                 dismiss();
             }
         });
@@ -106,6 +119,47 @@ public class SearchProductFragment extends BottomSheetDialogFragment implements 
         rootView.requestFocus();
 
         return rootView;
+
+    }
+
+    public void getSearchedShops(){
+        if (CenterRepository.getCenterRepository().getListOfShop() != null){
+            ShopListAdapterSearch adapter = new ShopListAdapterSearch(getContext());
+            recyclerView.setAdapter(adapter);
+            adapter.SetOnItemClickListener(new ShopListAdapterSearch.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(View view, int position) {
+
+                    Utils.switchFragmentWithAnimation(
+                            R.id.frag_container,
+                            new ProductOverviewFragment( CenterRepository.getCenterRepository()
+                                    .getListOfSearchedShops().get(position).getShopName()),
+                            ((ECartHomeActivity) context), null,
+                            Utils.AnimationType.SLIDE_LEFT);
+                    dismiss();
+                }
+            });
+            adapter.notifyDataSetChanged();
+
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+    }
+    private void setSearchedShop(String searchString){
+        if (searchString == null) {
+           CenterRepository.getCenterRepository().setListOfSearchedShops(CenterRepository.getCenterRepository().getListOfShop());
+        }else {
+            ArrayList<ShopModel> searchedProducts = new ArrayList<>();
+            ArrayList<ShopModel> shopModels = CenterRepository.getCenterRepository().getListOfShop();
+            int size = shopModels.size();
+
+            for (int i=0; i < size; i++) {
+                if (shopModels.get(i).getShopName().toLowerCase().contains(searchString.toLowerCase())){
+                    searchedProducts.add(shopModels.get(i));
+                }
+            }
+            CenterRepository.getCenterRepository().setListOfSearchedShops(searchedProducts);
+        }
 
     }
 
@@ -118,11 +172,6 @@ public class SearchProductFragment extends BottomSheetDialogFragment implements 
 
                 @Override
                 public void onItemClick(View view, int position) {
-//                    Utils.addFragmentWithAnimation(R.id.frag_container,
-//                            new ProductDetailsFragment("", position, false),
-//                            ((ECartHomeActivity) (getContext())), null,
-//                            Utils.AnimationType.SLIDE_IN_SLIDE_OUT);
-
                 }
             });
             adapter.notifyDataSetChanged();
@@ -136,17 +185,17 @@ public class SearchProductFragment extends BottomSheetDialogFragment implements 
 
 
     private void setSearchProductList(String searchString){
-        Set<String> keySet = CenterRepository.getCenterRepository().getMapAllProducts().keySet();
+        Set<String> keySet = CenterRepository.getCenterRepository().getMapOfProductsInCategory().keySet();
         if (searchString == null) {
-//            for (String string : keySet) {
-//                CenterRepository.getCenterRepository().setListOfSearchedProducts(CenterRepository.getCenterRepository().getMapAllProducts().get(string));
-//                break;
-//            }
+            for (String string : keySet) {
+                CenterRepository.getCenterRepository().setListOfSearchedProducts(CenterRepository.getCenterRepository().getMapOfProductsInCategory().get(string));
+                break;
+            }
         }else {
             List<Product> searchedProducts = new ArrayList<>();
 
             for (String string : keySet) {
-                ArrayList<Product> products = CenterRepository.getCenterRepository().getMapAllProducts().get(string);
+                ArrayList<Product> products = CenterRepository.getCenterRepository().getMapOfProductsInCategory().get(string);
                 int sizeProducts = products.size();
                 for (int j =0; j<sizeProducts;j++){
                     if (isHome){
@@ -175,12 +224,26 @@ public class SearchProductFragment extends BottomSheetDialogFragment implements 
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        setSearchProductList(charSequence.toString());
-        getSearchedProducts();
+        if (isHome){
+            setSearchedShop(charSequence.toString());
+            getSearchedShops();
+        }else {
+            setSearchProductList(charSequence.toString());
+            getSearchedProducts();
+        }
     }
 
     @Override
     public void afterTextChanged(Editable editable) {
 
     }
+
+    public  void hideKeyboard(Context context) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+
+        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+    }
+
+
 }

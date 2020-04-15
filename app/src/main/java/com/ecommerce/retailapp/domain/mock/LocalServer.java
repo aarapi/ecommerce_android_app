@@ -26,17 +26,17 @@ import java.util.concurrent.ConcurrentHashMap;
 /*
  * This class serve as fake server and provides dummy product and category with real Image Urls taken from flipkart
  */
-public class FakeWebServer {
+public class LocalServer {
 
-    private static FakeWebServer fakeServer;
+    private static LocalServer fakeServer;
     private static SenderBridge senderBridge;
     private Gson gson = new Gson();
     private List<Object> data;
 
-    public static FakeWebServer getFakeWebServer() {
+    public static LocalServer getFakeWebServer() {
 
         if (null == fakeServer) {
-            fakeServer = new FakeWebServer();
+            fakeServer = new LocalServer();
         }
         return fakeServer;
     }
@@ -61,10 +61,7 @@ public class FakeWebServer {
 
         Type founderListType = new TypeToken<ArrayList<ProductCategoryModel>>(){}.getType();
         Type founderShopType = new TypeToken<ArrayList<ShopModel>>(){}.getType();
-        Type founderProductMap = new TypeToken<ConcurrentHashMap<String, ArrayList<Product>>>(){}.getType();
-
-        ConcurrentHashMap<String, ArrayList<Product>> productMap =
-                new ConcurrentHashMap<String, ArrayList<Product>>();
+        Type founderStoryProducts = new TypeToken<ArrayList<Product>>(){}.getType();
 
         senderBridge = new SenderBridge(context);
 
@@ -80,9 +77,11 @@ public class FakeWebServer {
 
             CenterRepository.getCenterRepository().setListOfShop(shopList);
 
-            productMap = gson.fromJson(gson.toJson(data.get(2)), founderProductMap);
+            ArrayList<Product> storyProductList = gson.fromJson(gson.toJson(data.get(2)), founderStoryProducts);
+            ArrayList<Product> adsProducts = gson.fromJson(gson.toJson(data.get(3)), founderStoryProducts);
 
-            CenterRepository.getCenterRepository().setMapAllProducts(productMap);
+            CenterRepository.getCenterRepository().setListOfStoryProducts(storyProductList);
+            CenterRepository.getCenterRepository().setAdsProducts(adsProducts);
 
         }else
             CenterRepository.getCenterRepository().setListOfCategory(null);
@@ -102,6 +101,7 @@ public class FakeWebServer {
             productMap = gson.fromJson(gson.toJson(data.get(0)), founderListType);
 
             CenterRepository.getCenterRepository().setMapOfProductsInCategory(productMap);
+
         }else
             CenterRepository.getCenterRepository().setMapOfProductsInCategory(null);
 
@@ -115,13 +115,5 @@ public class FakeWebServer {
             getAllProductsOfCategory(shopName, context);
 
     }
-    public void getAllShopList(int productCategory, Context context) {
-        String categoryName = CenterRepository.getCenterRepository()
-                .getListOfCategory().get(productCategory).categoryName;
-
-        addShop(categoryName, context);
-
-    }
-
 
 }

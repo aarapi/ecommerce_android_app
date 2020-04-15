@@ -20,15 +20,20 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 
 import com.ecommerce.retailapp.R;
+import com.ecommerce.retailapp.domain.api.ProductLoaderTask;
+import com.ecommerce.retailapp.model.CenterRepository;
+import com.ecommerce.retailapp.utils.AppConstants;
 import com.ecommerce.retailapp.utils.Utils;
 import com.ecommerce.retailapp.utils.Utils.AnimationType;
 import com.ecommerce.retailapp.view.activities.ECartHomeActivity;
 import com.ecommerce.retailapp.view.adapters.ProductListAdapter;
 import com.ecommerce.retailapp.view.adapters.ProductListAdapter.OnItemClickListener;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 public class ProductListFragment extends Fragment {
     private String subcategoryKey;
     private boolean isShoppingList;
+
 
     public ProductListFragment() {
         isShoppingList = true;
@@ -47,6 +52,7 @@ public class ProductListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_product_list_fragment, container,
                 false);
+
 
         if (isShoppingList) {
             view.findViewById(R.id.slide_down).setVisibility(View.VISIBLE);
@@ -122,6 +128,8 @@ public class ProductListFragment extends Fragment {
                 return true;
             }
         });
+
+
 
         return view;
     }

@@ -5,13 +5,15 @@
 
     <!-- Indigo 500 -->
     <color name="primary_500">#E91E63</color>
+    <color name="secondary_color">#ffcb00</color>
     <!-- Indigo 700 -->
-    <color name="primary_700">#DA1759</color>
+    <color name="primary_700">#E3C51550</color>
     <!-- Pink 500 -->
     <color name="accent_500">#E91E63</color>
     <!-- Pink 700 -->
     <color name="accent_700">#C2185B</color>
     <color name="black_trans80">#14000000</color>
+    <color name="placeholder_bg">#dddddd</color>
     <color name="indicator_unselected">#4D000000</color>
     <color name="blue_grey">#455A64</color>
     <color name="red">#F44336</color>

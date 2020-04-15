@@ -16,30 +16,31 @@
     android:background="@color/background"
     android:orientation="vertical">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#03A14D" />
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="2dp"-->
+<!--        android:background="@color/primary" />-->
 
-    <TextView
-        android:id="@+id/new_offers_banner"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_centerVertical="true"
-        android:background="#70000000"
-        android:ellipsize="marquee"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:freezesText="true"
-        android:gravity="center_vertical"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:paddingLeft="10dp"
-        android:scrollHorizontally="true"
-        android:singleLine="true"
-        android:text="@string/offer_banner"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:visibility="gone"></TextView>
+<!--    <TextView-->
+<!--        android:id="@+id/new_offers_banner"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:layout_centerVertical="true"-->
+<!--        android:background="@color/white"-->
+<!--        android:ellipsize="marquee"-->
+<!--        android:focusable="true"-->
+<!--        android:focusableInTouchMode="true"-->
+<!--        android:freezesText="true"-->
+<!--        android:gravity="center_vertical"-->
+<!--        android:marqueeRepeatLimit="marquee_forever"-->
+<!--        android:paddingLeft="10dp"-->
+<!--        android:scrollHorizontally="true"-->
+<!--        android:singleLine="true"-->
+<!--        android:text="@string/offer_banner"-->
+<!--        android:textColor="@color/secondary_color"-->
+<!--        android:textStyle="bold"-->
+<!--        android:textSize="20sp"-->
+<!--        android:visibility="gone"></TextView>-->
 
     <RelativeLayout
         android:id="@+id/checkout_item_root"

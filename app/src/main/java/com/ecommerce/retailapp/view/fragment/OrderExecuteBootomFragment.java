@@ -43,10 +43,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import studio.carbonylgroup.textfieldboxes.ExtendedEditText;
 
 
 public class OrderExecuteBootomFragment extends Fragment
@@ -134,6 +134,7 @@ public class OrderExecuteBootomFragment extends Fragment
                 senderBridge.sendMessageAssync(RequestFunction.makeAnOrder(productList,inputValue), getContext());
             }
         }else if (view == tv_cancel){
+            hideKeyboard(getContext());
             getActivity().onBackPressed();
         }else if (view == et_location){
 
@@ -152,9 +153,13 @@ public class OrderExecuteBootomFragment extends Fragment
 
         total_amount.setText(cashOutAmount);
 
-        String amount = cashOutAmount.substring(4);
+        String amount = cashOutAmount.substring(4).replaceAll("\\D+","");
         BigDecimal amountValue = BigDecimal.valueOf(Long.valueOf(amount)+ Long.valueOf("50"));
-        cashOutAmount = "ALL "+amountValue;
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        decimalFormat.setGroupingUsed(true);
+        decimalFormat.setGroupingSize(3);
+
+        cashOutAmount = "ALL "+ decimalFormat.format(amountValue.doubleValue());
 
         checkout_total_amount.setText(cashOutAmount);
 
@@ -216,5 +221,10 @@ public class OrderExecuteBootomFragment extends Fragment
     public void onDestroy() {
         super.onDestroy();
         ((ECartHomeActivity) getContext()).getCheckout_button().setVisibility(View.VISIBLE);
+    }
+
+    public  void hideKeyboard(Context context) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
     }
 }

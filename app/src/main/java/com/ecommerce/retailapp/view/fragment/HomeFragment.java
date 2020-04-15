@@ -8,6 +8,9 @@ import android.os.Handler;
 
 import com.ecommerce.retailapp.model.CenterRepository;
 import com.ecommerce.retailapp.model.entities.ProductCategoryModel;
+import com.ecommerce.retailapp.view.adapters.StoryRecyclerViewAdapter;
+import com.ecommerce.retailapp.view.data.StoryInfo;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import androidx.fragment.app.Fragment;
 import androidx.core.view.GravityCompat;
@@ -35,6 +38,9 @@ public class HomeFragment extends Fragment {
     int mutedColor = R.attr.colorPrimary;
     private CollapsingToolbarLayout collapsingToolbar;
     private RecyclerView recyclerView;
+    private ShimmerFrameLayout mShimmerViewContainer;
+    StoryRecyclerViewAdapter mStoryRVAdapter = new StoryRecyclerViewAdapter();
+    private RecyclerView rv_stories;
     /**
      * The double back to exit pressed once.
      */
@@ -52,6 +58,8 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_product_category, container, false);
+        mShimmerViewContainer = view.findViewById(R.id.shimmer_view_container);
+        rv_stories = view.findViewById(R.id.rv_stories);
 
         view.findViewById(R.id.search_item).setOnClickListener(
                 new OnClickListener() {
@@ -59,7 +67,7 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                        if (CenterRepository.getCenterRepository().getMapAllProducts() != null) {
+                        if (CenterRepository.getCenterRepository().getListOfShop() != null) {
                             searchFragment = new SearchProductFragment(getContext(), true);
                             searchFragment.show(getFragmentManager(),
                                     OrderExecuteBootomFragment.TAG);
@@ -69,7 +77,6 @@ public class HomeFragment extends Fragment {
 
                     }
                 });
-
         final Toolbar toolbar = (Toolbar) view.findViewById(R.id.anim_toolbar);
         ((ECartHomeActivity) getActivity()).setSupportActionBar(toolbar);
         ((ECartHomeActivity) getActivity()).getSupportActionBar()
@@ -99,9 +106,10 @@ public class HomeFragment extends Fragment {
             @Override
             public void onGenerated(Palette palette) {
 
-                mutedColor = palette.getMutedColor(R.color.primary_500);
-                collapsingToolbar.setContentScrimColor(mutedColor);
-                collapsingToolbar.setStatusBarScrimColor(R.color.black_trans80);
+                mutedColor = palette.getMutedColor(R.color.transparent);
+                collapsingToolbar.setContentScrimColor(getContext().getResources().getColor(R.color.primary));
+                collapsingToolbar.setStatusBarScrimColor(getContext().getResources().getColor(R.color.primary));
+
             }
         });
 
@@ -112,7 +120,9 @@ public class HomeFragment extends Fragment {
                 getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-            new ProductCategoryLoaderTask(recyclerView, getActivity()).execute();
+        mShimmerViewContainer.startShimmerAnimation();
+
+            new ProductCategoryLoaderTask(recyclerView, this).execute();
 
 
         view.setFocusableInTouchMode(true);
@@ -149,11 +159,46 @@ public class HomeFragment extends Fragment {
             }
         });
 
+
         return view;
 
     }
 
-    public SearchProductFragment getSearchFragment() {
-        return searchFragment;
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+
+    }
+
+    public ShimmerFrameLayout getmShimmerViewContainer() {
+        return mShimmerViewContainer;
+    }
+
+    public void setStory(){
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+
+        mStoryRVAdapter.setList(getStoryList());
+        rv_stories.setLayoutManager(layoutManager);
+        rv_stories.setAdapter(mStoryRVAdapter);
+        mStoryRVAdapter.notifyDataSetChanged();
+    }
+
+    private ArrayList<StoryInfo> getStoryList(){
+        ArrayList<StoryInfo> storyInfos = new ArrayList<>();
+        int size = CenterRepository.getCenterRepository().getAdsProducts().size();
+        for (int i =0; i<size; i++){
+            StoryInfo storyInfo = new StoryInfo();
+            storyInfo.ID = i+"";
+                storyInfo.Name = CenterRepository.getCenterRepository().getAdsProducts().get(i).getItemName();
+                storyInfo.Title = CenterRepository.getCenterRepository().getAdsProducts().get(i).getItemName();
+                storyInfo.ProductPrice = CenterRepository.getCenterRepository().getAdsProducts().get(i).getSellMRP();
+                storyInfo.setLink(CenterRepository.getCenterRepository().getAdsProducts().get(i).getImageURL());
+                storyInfos.add(storyInfo);
+
+        }
+        return storyInfos;
     }
 }

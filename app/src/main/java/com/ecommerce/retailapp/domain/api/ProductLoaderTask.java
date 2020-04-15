@@ -2,17 +2,20 @@
 package com.ecommerce.retailapp.domain.api;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.AsyncTask;
 
-import com.ecommerce.retailapp.model.entities.Product;
+import com.ecommerce.retailapp.R;
 import com.ecommerce.retailapp.model.entities.ShopModel;
+import com.ecommerce.retailapp.view.fragment.ProductOverviewFragment;
 import com.example.connectionframework.requestframework.sender.Repository;
 import com.google.android.material.tabs.TabLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
+import android.view.WindowManager;
 
-import com.ecommerce.retailapp.domain.mock.FakeWebServer;
+import com.ecommerce.retailapp.domain.mock.LocalServer;
 import com.ecommerce.retailapp.model.CenterRepository;
 import com.ecommerce.retailapp.utils.AppConstants;
 import com.ecommerce.retailapp.view.activities.ECartHomeActivity;
@@ -21,61 +24,48 @@ import com.ecommerce.retailapp.view.fragment.ProductListFragment;
 
 import java.util.ArrayList;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The Class ImageLoaderTask.
  */
 public class ProductLoaderTask extends AsyncTask<String, Void, Void> {
 
+    private ProductOverviewFragment productOverviewFragment;
     private Context context;
     private ViewPager viewPager;
     private TabLayout tabs;
     private RecyclerView recyclerView;
+    private String shopName;
     private ArrayList<ShopModel> listOfShop = new ArrayList<>();
 
-    public ProductLoaderTask(RecyclerView listView, Context context,
-                             ViewPager viewpager, TabLayout tabs) {
-
-        this.viewPager = viewpager;
+    public ProductLoaderTask(ProductOverviewFragment productOverviewFragment, String shopName, ViewPager viewPager, TabLayout tabs) {
+        this.productOverviewFragment = productOverviewFragment;
+        this.context = productOverviewFragment.getContext();
+        this.shopName = shopName;
+        this.viewPager = viewPager;
         this.tabs = tabs;
-        this.context = context;
-
-}
-    public ProductLoaderTask(Context context,
-                             ViewPager viewpager, TabLayout tabs) {
-
-        this.viewPager = viewpager;
-        this.tabs = tabs;
-        this.context = context;
-
     }
 
 
 
     @Override
     protected void onPreExecute() {
-
         super.onPreExecute();
 
-        if (null != ((ECartHomeActivity) context).getProgressBar()) {
-            ((ECartHomeActivity) context).getProgressBar().setVisibility(
-                    View.VISIBLE);
-        }
-
+        ((ECartHomeActivity) context).getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        AppConstants.disableBackPress = true;
 
     }
 
     @Override
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
-
-        if (null != ((ECartHomeActivity) context).getProgressBar())
-            ((ECartHomeActivity) context).getProgressBar().setVisibility(
-                    View.GONE);
-
-        if(CenterRepository.getCenterRepository().getMapAllProducts() != null) {
-            setUpUi();
+        productOverviewFragment.getShimmer_view_container().setVisibility(View.GONE);
+        ((ECartHomeActivity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+              AppConstants.disableBackPress = false;
+        if(CenterRepository.getCenterRepository().getMapOfProductsInCategory() != null) {
+          setUpUi();
         }else {
             if (null != ((ECartHomeActivity) context).getRl_error_server()) {
                 ((ECartHomeActivity) context).getTv_error_message().setText(Repository.newInstance().getMessageError());
@@ -84,12 +74,11 @@ public class ProductLoaderTask extends AsyncTask<String, Void, Void> {
             }
         }
 
-
     }
 
     @Override
     protected Void doInBackground(String... params) {
-        setProducstOfShop();
+        LocalServer.getFakeWebServer().getAllProductsOfCategory(shopName, context);
         return null;
     }
 
@@ -115,10 +104,12 @@ public class ProductLoaderTask extends AsyncTask<String, Void, Void> {
 
         viewPager.setAdapter(adapter);
 
-//		viewPager.setPageTransformer(true,
-//				new );
-
         tabs.setupWithViewPager(viewPager);
+        tabs.setSelectedTabIndicatorHeight((int) (5 * productOverviewFragment.getResources().getDisplayMetrics().density));
+        tabs.setSelectedTabIndicatorColor(productOverviewFragment.getResources().getColor(R.color.secondary_color));
+        tabs.setTabTextColors(Color.parseColor("#727272"),
+                productOverviewFragment.getResources().getColor(R.color.secondary_color));
+        tabs.setVisibility(View.VISIBLE);
 
         if (null != ((ECartHomeActivity) context).getFrag_container())
             ((ECartHomeActivity) context).getFrag_container().setVisibility(
@@ -127,26 +118,6 @@ public class ProductLoaderTask extends AsyncTask<String, Void, Void> {
     }
 
 
-    private void setProducstOfShop(){
-        ConcurrentHashMap<String, ArrayList<Product>> mapOfProductsInCategory = new ConcurrentHashMap<>();
-        Set<String> keys =  CenterRepository.getCenterRepository().getMapAllProducts().keySet();
-
-        for (String string : keys) {
-            ArrayList<Product> products = new ArrayList<>();
-            int sizeOfProducts = CenterRepository.getCenterRepository().getMapAllProducts().get(string).size();
-            for (int i = 0; i < sizeOfProducts; i++){
-                if (CenterRepository.getCenterRepository().getMapAllProducts().get(string).get(i).getShopName()
-                        .equals(CenterRepository.getCenterRepository().getShopsOfCategory().get(AppConstants.CURRENT_SHOP).getShopName())){
-                    products.add(CenterRepository.getCenterRepository().getMapAllProducts().get(string).get(i));
-                }
-            }
-            if(products.size() > 0)
-            mapOfProductsInCategory.put(string, products);
-        }
-
-        CenterRepository.getCenterRepository().setMapOfProductsInCategory(mapOfProductsInCategory);
-
-    }
 
 
 
