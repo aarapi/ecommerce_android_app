@@ -3,20 +3,19 @@
 package com.ecommerce.retailapp.view.fragment;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
 
-import com.ecommerce.retailapp.model.entities.Product;
-import com.ecommerce.retailapp.model.entities.ProductCategoryModel;
+import com.bumptech.glide.Glide;
 import com.ecommerce.retailapp.utils.AppConstants;
+import com.ecommerce.retailapp.utils.ColorGenerator;
+import com.ecommerce.retailapp.view.customview.TextDrawable;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.tabs.TabLayout;
 import androidx.fragment.app.Fragment;
 import androidx.core.view.GravityCompat;
 import androidx.viewpager.widget.ViewPager;
-import androidx.palette.graphics.Palette;
+
 import androidx.appcompat.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -31,13 +30,6 @@ import com.ecommerce.retailapp.model.CenterRepository;
 import com.ecommerce.retailapp.utils.Utils;
 import com.ecommerce.retailapp.utils.Utils.AnimationType;
 import com.ecommerce.retailapp.view.activities.ECartHomeActivity;
-import com.ecommerce.retailapp.view.adapters.ProductsInCategoryPagerAdapter;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
 public class ProductOverviewFragment extends Fragment {
 
     // SimpleRecyclerAdapter adapter;
@@ -50,12 +42,18 @@ public class ProductOverviewFragment extends Fragment {
     private  View view;
     private String shopName;
     private ShimmerFrameLayout shimmer_view_container;
+    private TextDrawable.IBuilder mDrawableBuilder;
+    private TextDrawable drawable;
+    private ColorGenerator mColorGenerator = ColorGenerator.MATERIAL;
+    private String ImageUrl;
+    String categoryName;
 
     public ProductOverviewFragment() {
     }
 
-    public ProductOverviewFragment(String shopName) {
+    public ProductOverviewFragment(String shopName, String categoryName) {
         this.shopName = shopName;
+        this.categoryName = categoryName;
     }
 
     @Override
@@ -93,7 +91,23 @@ public class ProductOverviewFragment extends Fragment {
         collapsingToolbarLayout.setTitleEnabled(false);
 
         header = (KenBurnsView) view.findViewById(R.id.htab_header);
-        header.setImageResource(R.drawable.header);
+
+        int size = CenterRepository.getCenterRepository().getListOfCategory().size();
+        for (int i = 0; i < size; i++) {
+            if (CenterRepository.getCenterRepository().getListOfCategory().get(i).getProductCategoryName().equals(categoryName)) {
+                ImageUrl = CenterRepository.getCenterRepository().getListOfCategory().get(i).getProductCategoryImageUrl();
+                break;
+            }
+        }
+        mDrawableBuilder = TextDrawable.builder().beginConfig().withBorder(4)
+                .endConfig().roundRect(10);
+
+        drawable = mDrawableBuilder.build(String.valueOf(shopName.charAt(0)), mColorGenerator
+                .getColor(shopName));
+
+        Glide.with(getContext()).load(ImageUrl).placeholder(drawable)
+                .error(drawable)
+                .centerCrop().into(header);
 
 
         mToolbar = (Toolbar) view.findViewById(R.id.htab_toolbar);

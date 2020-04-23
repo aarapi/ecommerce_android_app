@@ -30,16 +30,11 @@ import com.ecommerce.retailapp.model.entities.Money;
 import com.ecommerce.retailapp.model.entities.Product;
 import com.ecommerce.retailapp.model.entities.ShopModel;
 import com.ecommerce.retailapp.utils.ColorGenerator;
-import com.ecommerce.retailapp.utils.Utils;
-import com.ecommerce.retailapp.view.activities.ECartHomeActivity;
 import com.ecommerce.retailapp.view.customview.TextDrawable;
 import com.ecommerce.retailapp.view.customview.TextDrawable.IBuilder;
-import com.ecommerce.retailapp.view.data.StoryInfo;
 
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -116,21 +111,19 @@ public class  ShopListAdapter extends
         versionViewHolder.mStoryRVAdapter.notifyDataSetChanged();
     }
 
-    private ArrayList<StoryInfo> getStoryList(String shopName){
-        ArrayList<StoryInfo> storyInfos = new ArrayList<>();
+    private ArrayList<Product> getStoryList(String shopName) {
+        ArrayList<Product> productList = new ArrayList<>();
         int size = CenterRepository.getCenterRepository().getListOfStoryProducts().size();
         for (int i =0; i<size; i++){
-            StoryInfo storyInfo = new StoryInfo();
-            storyInfo.ID = i+"";
+            Product product = new Product();
+
             if (CenterRepository.getCenterRepository().getListOfStoryProducts().get(i).getShopName().equals(shopName)) {
-                storyInfo.Name = CenterRepository.getCenterRepository().getListOfStoryProducts().get(i).getItemName();
-                storyInfo.Title = CenterRepository.getCenterRepository().getListOfStoryProducts().get(i).getItemName();
-                storyInfo.ProductPrice = CenterRepository.getCenterRepository().getListOfStoryProducts().get(i).getSellMRP();
-                storyInfo.setLink(CenterRepository.getCenterRepository().getListOfStoryProducts().get(i).getImageURL());
-                storyInfos.add(storyInfo);
+                product = CenterRepository.getCenterRepository().getListOfStoryProducts().get(i);
+                product.setProductId(i + "");
+                productList.add(product);
             }
         }
-        return storyInfos;
+        return productList;
     }
 
     @Override

@@ -29,6 +29,7 @@ import com.ecommerce.retailapp.view.fragment.ProductOverviewFragment;
 import com.ecommerce.retailapp.view.fragment.SettingsFragment;
 import com.ecommerce.retailapp.view.fragment.ShopListFragment;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -487,6 +488,24 @@ public class Utils {
         SLIDE_LEFT, SLIDE_RIGHT, SLIDE_UP, SLIDE_DOWN, FADE_IN, SLIDE_IN_SLIDE_OUT, FADE_OUT
     }
 
+
+    public static boolean deleteDir(File dir) {
+//        if (dir != null && dir.isDirectory()) {
+////            String[] children = dir.list();
+////            for (int i = 0; i < children.length; i++) {
+////                boolean success = deleteDir(new File(dir, children[i]));
+////                if (!success) {
+////                    return false;
+////                }
+////            }
+////        }
+////
+////        // The directory is now empty so delete it
+////
+////        return dir.delete();
+
+        return true;
+    }
 
 
 }

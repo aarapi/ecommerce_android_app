@@ -23,7 +23,7 @@
     card_view:cardCornerRadius="4dp"
     card_view:cardElevation="@dimen/cardview_default_elevation">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:id="@+id/top_view"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -36,17 +36,20 @@
             android:id="@+id/cv_image"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            app:cardCornerRadius="6dp"
-            android:layout_marginLeft="5dp"
             android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:elevation="10dp"
             android:gravity="center_vertical"
-            android:elevation="10dp">
-        <ImageView
-            android:id="@+id/product_thumb"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            android:scaleType="fitXY"/>
+            app:cardCornerRadius="6dp">
+
+            <ImageView
+                android:id="@+id/product_thumb"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:adjustViewBounds="true"
+                android:background="@color/white"
+                android:scaleType="fitXY" />
         </androidx.cardview.widget.CardView>
 
         <RelativeLayout

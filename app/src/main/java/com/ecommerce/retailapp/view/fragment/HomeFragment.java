@@ -7,9 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.ecommerce.retailapp.model.CenterRepository;
-import com.ecommerce.retailapp.model.entities.ProductCategoryModel;
 import com.ecommerce.retailapp.view.adapters.StoryRecyclerViewAdapter;
-import com.ecommerce.retailapp.view.data.StoryInfo;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import androidx.fragment.app.Fragment;
@@ -28,15 +26,12 @@ import android.widget.Toast;
 
 import com.ecommerce.retailapp.R;
 import com.ecommerce.retailapp.domain.api.ProductCategoryLoaderTask;
-import com.ecommerce.retailapp.utils.Utils;
-import com.ecommerce.retailapp.utils.Utils.AnimationType;
 import com.ecommerce.retailapp.view.activities.ECartHomeActivity;
 
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
     int mutedColor = R.attr.colorPrimary;
-    private CollapsingToolbarLayout collapsingToolbar;
     private RecyclerView recyclerView;
     private ShimmerFrameLayout mShimmerViewContainer;
     StoryRecyclerViewAdapter mStoryRVAdapter = new StoryRecyclerViewAdapter();
@@ -91,11 +86,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        collapsingToolbar = (CollapsingToolbarLayout) view
-                .findViewById(R.id.collapsing_toolbar);
-
-        collapsingToolbar.setTitle("Kategorite");
-
         ImageView header = (ImageView) view.findViewById(R.id.header);
 
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
@@ -107,8 +97,6 @@ public class HomeFragment extends Fragment {
             public void onGenerated(Palette palette) {
 
                 mutedColor = palette.getMutedColor(R.color.transparent);
-                collapsingToolbar.setContentScrimColor(getContext().getResources().getColor(R.color.primary));
-                collapsingToolbar.setStatusBarScrimColor(getContext().getResources().getColor(R.color.primary));
 
             }
         });
@@ -122,7 +110,7 @@ public class HomeFragment extends Fragment {
 
         mShimmerViewContainer.startShimmerAnimation();
 
-            new ProductCategoryLoaderTask(recyclerView, this).execute();
+        new ProductCategoryLoaderTask(recyclerView, this).execute();
 
 
         view.setFocusableInTouchMode(true);
@@ -180,25 +168,17 @@ public class HomeFragment extends Fragment {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 
-        mStoryRVAdapter.setList(getStoryList());
+        storyList();
+        mStoryRVAdapter.setList(CenterRepository.getCenterRepository().getAdsProducts());
         rv_stories.setLayoutManager(layoutManager);
         rv_stories.setAdapter(mStoryRVAdapter);
         mStoryRVAdapter.notifyDataSetChanged();
     }
 
-    private ArrayList<StoryInfo> getStoryList(){
-        ArrayList<StoryInfo> storyInfos = new ArrayList<>();
+    private void storyList() {
         int size = CenterRepository.getCenterRepository().getAdsProducts().size();
         for (int i =0; i<size; i++){
-            StoryInfo storyInfo = new StoryInfo();
-            storyInfo.ID = i+"";
-                storyInfo.Name = CenterRepository.getCenterRepository().getAdsProducts().get(i).getItemName();
-                storyInfo.Title = CenterRepository.getCenterRepository().getAdsProducts().get(i).getItemName();
-                storyInfo.ProductPrice = CenterRepository.getCenterRepository().getAdsProducts().get(i).getSellMRP();
-                storyInfo.setLink(CenterRepository.getCenterRepository().getAdsProducts().get(i).getImageURL());
-                storyInfos.add(storyInfo);
-
+            CenterRepository.getCenterRepository().getAdsProducts().get(i).setProductId(i + "");
         }
-        return storyInfos;
     }
 }

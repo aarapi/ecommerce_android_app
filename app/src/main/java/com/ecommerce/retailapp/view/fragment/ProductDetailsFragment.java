@@ -448,33 +448,39 @@ public class ProductDetailsFragment extends Fragment implements OnClickListener 
                             .getCenterRepository().getMapOfProductsInCategory()
                             .get(subcategoryKey).get(productListNumber)
                             .getItemName()));
+            if (CenterRepository.getCenterRepository().getMapOfProductsInCategory()
+                    .get(subcategoryKey).get(productListNumber)
+                    .getImageURL().isEmpty()) {
+                itemImage.setImageDrawable(drawable);
+            } else {
 
-            Picasso.with(getActivity())
-                    .load(CenterRepository.getCenterRepository().getMapOfProductsInCategory()
-                            .get(subcategoryKey).get(productListNumber)
-                            .getImageURL()).placeholder(drawable)
-                    .error(drawable).fit().centerCrop()
-                    .networkPolicy(NetworkPolicy.OFFLINE)
-                    .into(itemImage, new Callback() {
-                        @Override
-                        public void onSuccess() {
+                Picasso.with(getActivity())
+                        .load(CenterRepository.getCenterRepository().getMapOfProductsInCategory()
+                                .get(subcategoryKey).get(productListNumber)
+                                .getImageURL()).placeholder(drawable)
+                        .error(drawable).fit().centerCrop()
+                        .networkPolicy(NetworkPolicy.OFFLINE)
+                        .into(itemImage, new Callback() {
+                            @Override
+                            public void onSuccess() {
 
-                        }
+                            }
 
-                        @Override
-                        public void onError() {
-                            // Try again online if cache failed
+                            @Override
+                            public void onError() {
+                                // Try again online if cache failed
 
-                            Picasso.with(getActivity())
-                                    .load(CenterRepository.getCenterRepository()
-                                            .getMapOfProductsInCategory()
-                                            .get(subcategoryKey)
-                                            .get(productListNumber)
-                                            .getImageURL())
-                                    .placeholder(drawable).error(drawable)
-                                    .fit().centerCrop().into(itemImage);
-                        }
-                    });
+                                Picasso.with(getActivity())
+                                        .load(CenterRepository.getCenterRepository()
+                                                .getMapOfProductsInCategory()
+                                                .get(subcategoryKey)
+                                                .get(productListNumber)
+                                                .getImageURL())
+                                        .placeholder(drawable).error(drawable)
+                                        .fit().centerCrop().into(itemImage);
+                            }
+                        });
+            }
 
             LabelView label = new LabelView(getActivity());
 

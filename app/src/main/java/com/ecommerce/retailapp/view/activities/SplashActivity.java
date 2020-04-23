@@ -23,6 +23,10 @@ import android.widget.TextView;
 import com.ecommerce.retailapp.R;
 import com.ecommerce.retailapp.domain.helper.Connectivity;
 
+import java.io.File;
+
+import static com.ecommerce.retailapp.utils.Utils.deleteDir;
+
 
 public class SplashActivity extends FragmentActivity {
 
@@ -111,6 +115,12 @@ public class SplashActivity extends FragmentActivity {
 
                     dialog.show();
                 }else {
+                    try {
+                        File dir = getCacheDir();
+                        deleteDir(dir);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     Intent intent = new Intent(getApplicationContext(),
                             ECartHomeActivity.class);
                     startActivity(intent);
@@ -134,7 +144,6 @@ public class SplashActivity extends FragmentActivity {
     public void onBackPressed() {
         // Do nothing
     }
-
 
 
 }

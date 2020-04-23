@@ -11,6 +11,7 @@ package com.ecommerce.retailapp.view.adapters;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.ecommerce.retailapp.R;
+import com.ecommerce.retailapp.model.entities.Product;
 import com.ecommerce.retailapp.utils.ColorGenerator;
 import com.ecommerce.retailapp.view.activities.ECartHomeActivity;
 import com.ecommerce.retailapp.view.activities.StoryActivity;
@@ -42,14 +44,14 @@ public class StoryRecyclerViewAdapter
 
     public static String STORY_LIST_INFO = "STORY_LIST_INFO";
     public static String SELECTED_ITEM_INFO = "SELECTED_ITEM_INFO";
-    private ArrayList<StoryInfo> mList = new ArrayList<>();
+    private ArrayList<Product> mList = new ArrayList<>();
 
 
-    public List<StoryInfo> getList() {
+    public List<Product> getList() {
         return mList;
     }
 
-    public void setList(ArrayList<StoryInfo> mList) {
+    public void setList(ArrayList<Product> mList) {
         this.mList = mList;
         notifyDataSetChanged();
     }
@@ -64,11 +66,11 @@ public class StoryRecyclerViewAdapter
 
     @Override
     public void onBindViewHolder(@NonNull StoryViewHolder holder, int position) {
-        StoryInfo item = getItem(position);
+        Product item = getItem(position);
         holder.bind(item);
     }
 
-    public StoryInfo getItem(int position) {
+    public Product getItem(int position) {
         return mList.size() > position ? mList.get(position) : null;
     }
 
@@ -79,18 +81,25 @@ public class StoryRecyclerViewAdapter
 
     @Override
     public void onClick(View itemView) {
-        StoryInfo clickedItem = (StoryInfo) itemView.getTag();
-        showCampaign(clickedItem, (ECartHomeActivity) itemView.getContext(), itemView);
+        Product clickedItem = (Product) itemView.getTag();
+        try {
+            Context context = ((ContextWrapper) itemView.getContext()).getBaseContext();
+            showCampaign(clickedItem, (ECartHomeActivity) context, itemView);
+        } catch (Exception ex) {
+            showCampaign(clickedItem, (ECartHomeActivity) itemView.getContext(), itemView);
+        }
+
+
     }
 
-    private void showCampaign(StoryInfo storyInfo, ECartHomeActivity mActivity, @Nullable View itemView) {
+    private void showCampaign(Product storyInfo, ECartHomeActivity mActivity, @Nullable View itemView) {
 
         Bundle bundleParams = new Bundle();
         bundleParams.putSerializable(STORY_LIST_INFO, mList);
         bundleParams.putSerializable(SELECTED_ITEM_INFO, storyInfo);
         Intent intent = new Intent(itemView.getContext(), StoryActivity.class);
         intent.putExtra("data", bundleParams);
-        mActivity.startActivity(intent);
+        mActivity.startActivityForResult(intent, 1);
 
     }
 }
@@ -119,28 +128,20 @@ class StoryViewHolder extends RecyclerView.ViewHolder {
      *
      * @param item to bind
      */
-    void bind(StoryInfo item) {
+    void bind(Product item) {
 
         boolean animateSeen = (itemView.getTag() == item);
 
-        float alpha = item.isSeen(itemView.getContext()) ? 0.4f : 1f;
-        if (alpha != mTextView.getAlpha()) {
-            if (animateSeen) {
-                mTextView.animate().alpha(alpha);
-            } else {
-                mTextView.setAlpha(alpha);
-            }
-        }
 
-        mTextView.setText(item.Title);
+        mTextView.setText(item.getItemName());
         itemView.setTag(item);
-        String imageUrl = item.getLink();
+        String imageUrl = item.getImageURL();
 
         mDrawableBuilder = TextDrawable.builder().beginConfig().withBorder(4)
                 .endConfig().roundRect(10);
 
-        drawable = mDrawableBuilder.build(String.valueOf(item.Title.charAt(0)), mColorGenerator
-                .getColor(item.Title));
+        drawable = mDrawableBuilder.build(String.valueOf(item.getItemName().charAt(0)), mColorGenerator
+                .getColor(item.getItemName()));
 
         ImageUrl = imageUrl;
 

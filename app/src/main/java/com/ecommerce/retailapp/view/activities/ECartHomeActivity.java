@@ -10,19 +10,25 @@ package com.ecommerce.retailapp.view.activities;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.bumptech.glide.util.Util;
 import com.ecommerce.retailapp.domain.mock.CheckSetup;
+import com.ecommerce.retailapp.utils.AppConstants;
 import com.ecommerce.retailapp.view.fragment.OrderExecuteBootomFragment;
+import com.ecommerce.retailapp.view.fragment.ProductOverviewFragment;
+import com.ecommerce.retailapp.view.fragment.ProductStoryOrderFragment;
 import com.example.connectionframework.requestframework.constants.Constants;
 import com.example.connectionframework.requestframework.receiver.ReceiverActivity;
 import com.example.connectionframework.requestframework.sender.Repository;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -45,8 +51,6 @@ import android.widget.TextView;
 
 import com.ecommerce.retailapp.R;
 import com.ecommerce.retailapp.domain.helper.Connectivity;
-import com.ecommerce.retailapp.domain.mining.AprioriFrequentItemsetGenerator;
-import com.ecommerce.retailapp.domain.mining.FrequentItemsetData;
 import com.ecommerce.retailapp.model.CenterRepository;
 import com.ecommerce.retailapp.model.entities.Money;
 import com.ecommerce.retailapp.model.entities.Product;
@@ -59,6 +63,7 @@ import com.ecommerce.retailapp.view.fragment.WhatsNewDialog;
 import com.rom4ek.arcnavigationview.ArcNavigationView;
 import com.wang.avi.AVLoadingIndicatorView;
 
+import java.io.File;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -70,13 +75,13 @@ import java.util.Set;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import softpro.naseemali.ShapedNavigationView;
 
+import static com.ecommerce.retailapp.utils.Utils.deleteDir;
+
 
 public class ECartHomeActivity extends AppCompatActivity implements ReceiverActivity, OnClickListener {
 
     public static final double MINIMUM_SUPPORT = 0.1;
     private static final String TAG = ECartHomeActivity.class.getSimpleName();
-    AprioriFrequentItemsetGenerator<String> generator =
-            new AprioriFrequentItemsetGenerator<>();
     private int itemCount = 0;
     private BigDecimal checkoutAmount = new BigDecimal(BigInteger.ZERO);
     private DrawerLayout mDrawerLayout;
@@ -291,7 +296,7 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
         }
 
         // Show Whats New Features If Requires
-        new WhatsNewDialog(this);
+//        new WhatsNewDialog(this);
     }
 
     /*
@@ -381,20 +386,9 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
             productId.add(productFromShoppingList.getProductId());
         }
 
-        //pass product id array to Apriori ALGO
         CenterRepository.getCenterRepository()
                 .addToItemSetList(new HashSet<>(productId));
 
-        //Do Minning
-        FrequentItemsetData<String> data = generator.generate(
-                CenterRepository.getCenterRepository().getItemSetList()
-                , MINIMUM_SUPPORT);
-
-        for (Set<String> itemset : data.getFrequentItemsetList()) {
-            Log.e("APriori", "Item Set : " +
-                    itemset + "Support : " +
-                    data.getSupport(itemset));
-        }
         openCheckoutPaymentFragment(isCashPayment);
 
     }
@@ -538,5 +532,30 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
         drawable.draw(canvas);
 
         return bitmap;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 1) {
+            Product product = (Product) data.getSerializableExtra("PRODUCT_DATA");
+            Utils.switchFragmentWithAnimation(
+                    R.id.frag_container,
+                    new ProductStoryOrderFragment(product),
+                    this, null,
+                    Utils.AnimationType.SLIDE_LEFT);
+        }
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        try {
+            File dir = getApplicationContext().getCacheDir();
+            deleteDir(dir);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onDestroy();
     }
 }

@@ -64,7 +64,9 @@ public class ShopListLoaderTask extends AsyncTask<String, Void, Void> {
                                 Utils.switchFragmentWithAnimation(
                                         R.id.frag_container,
                                         new ProductOverviewFragment( CenterRepository.getCenterRepository()
-                                                .getShopsOfCategory().get(AppConstants.CURRENT_SHOP).getShopName()),
+                                                .getShopsOfCategory().get(AppConstants.CURRENT_SHOP).getShopName(),
+                                                CenterRepository.getCenterRepository()
+                                                        .getShopsOfCategory().get(AppConstants.CURRENT_SHOP).getCategoryName()),
                                         ((ECartHomeActivity) context), null,
                                         Utils.AnimationType.SLIDE_LEFT);
 

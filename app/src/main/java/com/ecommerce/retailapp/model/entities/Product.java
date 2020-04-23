@@ -63,6 +63,20 @@ public class Product extends BaseJsonModel {
 
     private String subCategoryName;
 
+    private String productImageLocal;
+
+
+    public String getProductImageLocal() {
+        return productImageLocal;
+    }
+
+    public void setProductImageLocal(String productImageLocal) {
+        this.productImageLocal = productImageLocal;
+    }
+
+    public Product() {
+    }
+
     /**
      * @param itemName
      * @param itemShortDesc
@@ -73,6 +87,7 @@ public class Product extends BaseJsonModel {
      * @param quantity
      * @param imageURL
      */
+
     public Product(String itemName, String itemShortDesc, String itemDetail,
                    String MRP, String discount, String sellMRP, String quantity,
                    String imageURL, String orderId) {

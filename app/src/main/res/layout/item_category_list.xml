@@ -90,6 +90,7 @@
                         android:layout_centerVertical="true"
                     android:src="@drawable/ic_star_clicked"></ImageView>
                     <TextView
+                        android:id="@+id/tv_star"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@id/star"
@@ -139,13 +140,10 @@
             android:scaleType="fitXY" />
 
 
-
         <TextView
             android:id="@+id/category_discount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/artist_name"
-            android:layout_alignBottom="@+id/artist_name"
             android:layout_alignParentRight="true"
             android:layout_marginBottom="3dp"
             android:layout_marginLeft="5dp"

@@ -9,24 +9,19 @@
 package com.ecommerce.retailapp.view.fragment;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,7 +35,6 @@ import com.ecommerce.retailapp.view.adapters.ReceiptProductListAdapter;
 import com.example.connectionframework.requestframework.sender.SenderBridge;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -59,7 +53,7 @@ public class OrderExecuteBootomFragment extends Fragment
     public static String CHECKOUT_DATA = "CHECKOUT_DATA";
     private EditText et_location, et_name, et_phone;
     private ListView receiptListView;
-    private TextView total_amount, checkout_total_amount;
+    private TextView total_amount, checkout_total_amount, tv_transport;
     private static boolean isCashPayment;
     private static ECartHomeActivity eCartHomeActivity;
     private SweetAlertDialog pDialog;
@@ -96,7 +90,7 @@ public class OrderExecuteBootomFragment extends Fragment
         total_amount = view.findViewById(R.id.checkout_amount);
         checkout_total_amount = view.findViewById(R.id.checkout_total_amount);
         tv_cancel = view.findViewById(R.id.tv_cancel);
-
+        tv_transport = view.findViewById(R.id.transport);
         tv_cancel.setOnClickListener(this);
 
         showReceipt();
@@ -154,7 +148,13 @@ public class OrderExecuteBootomFragment extends Fragment
         total_amount.setText(cashOutAmount);
 
         String amount = cashOutAmount.substring(4).replaceAll("\\D+","");
-        BigDecimal amountValue = BigDecimal.valueOf(Long.valueOf(amount)+ Long.valueOf("50"));
+        double transport = Long.valueOf(amount) * 0.02;
+        if (transport < 150) {
+            transport = 100;
+        } else {
+            transport = 200;
+        }
+        BigDecimal amountValue = BigDecimal.valueOf(Long.valueOf(amount) + transport);
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         decimalFormat.setGroupingUsed(true);
         decimalFormat.setGroupingSize(3);
@@ -162,6 +162,7 @@ public class OrderExecuteBootomFragment extends Fragment
         cashOutAmount = "ALL "+ decimalFormat.format(amountValue.doubleValue());
 
         checkout_total_amount.setText(cashOutAmount);
+        tv_transport.setText(transport + "");
 
 
 

@@ -20,6 +20,11 @@ public class ProductCategoryModel {
     public String categoryDescription;
     public String categoryDiscount;
     public String categoryImageUrl;
+    private int stars;
+    private String transportTime;
+    private String transportAmount;
+    private String categoryImageLocal;
+
     /**
      * @param productCategoryName
      * @param productCategoryDescription
@@ -91,4 +96,28 @@ public class ProductCategoryModel {
         this.categoryImageUrl = productUrl;
     }
 
+
+    public String getCategoryDescription() {
+        return categoryDescription;
+    }
+
+    public int getStars() {
+        return stars;
+    }
+
+    public String getTransportTime() {
+        return transportTime;
+    }
+
+    public String getTransportAmount() {
+        return transportAmount;
+    }
+
+    public String getCategoryImageLocal() {
+        return categoryImageLocal;
+    }
+
+    public void setCategoryImageLocal(String categoryImageLocal) {
+        this.categoryImageLocal = categoryImageLocal;
+    }
 }

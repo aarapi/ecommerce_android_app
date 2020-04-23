@@ -22,8 +22,11 @@ import com.ecommerce.retailapp.view.activities.ECartHomeActivity;
 import com.ecommerce.retailapp.view.adapters.ProductsInCategoryPagerAdapter;
 import com.ecommerce.retailapp.view.fragment.ProductListFragment;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Set;
+
+import static com.ecommerce.retailapp.utils.Utils.deleteDir;
 
 /**
  * The Class ImageLoaderTask.
@@ -78,6 +81,12 @@ public class ProductLoaderTask extends AsyncTask<String, Void, Void> {
 
     @Override
     protected Void doInBackground(String... params) {
+        try {
+            File dir = context.getCacheDir();
+            deleteDir(dir);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         LocalServer.getFakeWebServer().getAllProductsOfCategory(shopName, context);
         return null;
     }

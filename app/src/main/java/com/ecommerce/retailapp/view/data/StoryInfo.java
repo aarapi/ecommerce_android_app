@@ -41,8 +41,8 @@ public class StoryInfo implements Serializable {
     @SerializedName("Title")
     public String Title;
 
-    @SerializedName("SubTitle")
-    public String SubTitle;
+    @SerializedName("ShopName")
+    public String ShopName;
 
     @SerializedName("storyDuration")
     private long storyDuration;

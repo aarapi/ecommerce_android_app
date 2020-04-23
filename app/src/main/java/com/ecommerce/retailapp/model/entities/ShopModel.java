@@ -20,6 +20,7 @@ public class ShopModel {
     private int avalibility;
     private Time openTime;
     private Time closeTime;
+    private String shopImageLocal;
 
     public int getShopId() {
         return shopId;
@@ -83,5 +84,13 @@ public class ShopModel {
 
     public void setCloseTime(Time closeTime) {
         this.closeTime = closeTime;
+    }
+
+    public String getShopImageLocal() {
+        return shopImageLocal;
+    }
+
+    public void setShopImageLocal(String shopImageLocal) {
+        this.shopImageLocal = shopImageLocal;
     }
 }

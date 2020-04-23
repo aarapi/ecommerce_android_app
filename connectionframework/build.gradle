@@ -12,13 +12,11 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles 'consumer-rules.pro'
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     flavorDimensions "api"
@@ -28,6 +26,7 @@ android {
             dimension "api"
             buildConfigField("String", "HOST_URL", '"http://45.63.40.146:8080/annoyingProjectsGateway/generics"')
         }
+
 
     }
 }

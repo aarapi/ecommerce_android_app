@@ -134,7 +134,9 @@ public class SearchProductFragment extends BottomSheetDialogFragment implements 
                     Utils.switchFragmentWithAnimation(
                             R.id.frag_container,
                             new ProductOverviewFragment( CenterRepository.getCenterRepository()
-                                    .getListOfSearchedShops().get(position).getShopName()),
+                                    .getListOfSearchedShops().get(position).getShopName(),
+                                    CenterRepository.getCenterRepository()
+                                            .getListOfSearchedShops().get(position).getCategoryName()),
                             ((ECartHomeActivity) context), null,
                             Utils.AnimationType.SLIDE_LEFT);
                     dismiss();

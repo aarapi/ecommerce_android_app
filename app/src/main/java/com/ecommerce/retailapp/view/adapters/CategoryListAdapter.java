@@ -44,6 +44,7 @@ public class CategoryListAdapter extends
     private String ImageUrl;
     private Context context;
 
+
     public CategoryListAdapter(Context context) {
 
         categoryList = CenterRepository.getCenterRepository().getListOfCategory();
@@ -65,9 +66,14 @@ public class CategoryListAdapter extends
 
         versionViewHolder.itemName.setText(categoryList.get(categoryIndex)
                 .getProductCategoryName());
-
         versionViewHolder.itemDesc.setText(categoryList.get(categoryIndex)
                 .getProductCategoryDescription());
+        versionViewHolder.tv_star.setText(categoryList.get(categoryIndex)
+                .getStars() + "");
+        versionViewHolder.tv_time.setText(categoryList.get(categoryIndex)
+                .getTransportTime());
+        versionViewHolder.tv_transport.setText(categoryList.get(categoryIndex)
+                .getTransportAmount());
 
         mDrawableBuilder = TextDrawable.builder().beginConfig().withBorder(4)
                 .endConfig().roundRect(10);
@@ -82,13 +88,6 @@ public class CategoryListAdapter extends
         Glide.with(context).load(ImageUrl).placeholder(drawable)
                 .error(drawable)
                 .centerCrop().into(versionViewHolder.imagView);
-
-//        LabelView label = new LabelView(context);
-//        label.setText(categoryList.get(categoryIndex)
-//                .getProductCategoryDiscount());
-//        label.setBackgroundColor(0xffE91E63);
-//        label.setTargetView(versionViewHolder.imagView, 10,
-//                LabelView.Gravity.RIGHT_TOP);
 
     }
 
@@ -110,6 +109,7 @@ public class CategoryListAdapter extends
             View.OnClickListener {
         TextView itemName, itemDesc, itemCost, availability, quanitity,
                 addItem, removeItem;
+        private TextView tv_star, tv_time, tv_transport;
         ImageView imagView;
 
         public VersionViewHolder(View itemView) {
@@ -122,6 +122,10 @@ public class CategoryListAdapter extends
             itemName.setSelected(true);
 
             imagView = ((ImageView) itemView.findViewById(R.id.imageView));
+
+            tv_star = itemView.findViewById(R.id.tv_star);
+            tv_time = itemView.findViewById(R.id.tv_time);
+            tv_transport = itemView.findViewById(R.id.tv_transport);
 
             itemView.setOnClickListener(this);
 
