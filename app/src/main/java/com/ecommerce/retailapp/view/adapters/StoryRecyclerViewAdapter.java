@@ -26,13 +26,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.ecommerce.retailapp.R;
+import com.ecommerce.retailapp.model.CenterRepository;
 import com.ecommerce.retailapp.model.entities.Product;
+import com.ecommerce.retailapp.utils.AppConstants;
 import com.ecommerce.retailapp.utils.ColorGenerator;
+import com.ecommerce.retailapp.utils.Utils;
 import com.ecommerce.retailapp.view.activities.ECartHomeActivity;
 import com.ecommerce.retailapp.view.activities.StoryActivity;
 import com.ecommerce.retailapp.view.customview.TextDrawable;
 import com.ecommerce.retailapp.view.customview.TextDrawable.IBuilder;
 import com.ecommerce.retailapp.view.data.StoryInfo;
+import com.ecommerce.retailapp.view.fragment.ProductOverviewFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +50,14 @@ public class StoryRecyclerViewAdapter
     public static String SELECTED_ITEM_INFO = "SELECTED_ITEM_INFO";
     private ArrayList<Product> mList = new ArrayList<>();
 
+    private boolean isShop;
+
+    private Context context;
+
+    public StoryRecyclerViewAdapter(boolean isShop, Context context) {
+        this.isShop = isShop;
+        this.context = context;
+    }
 
     public List<Product> getList() {
         return mList;
@@ -60,7 +72,13 @@ public class StoryRecyclerViewAdapter
     @Override
     @SuppressLint("InflateParams")
     public StoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.story_cell_layout, null);
+        View view;
+        if (isShop) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.story_cell_layout_shop, null);
+        } else {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.story_cell_layout, null);
+        }
+
         return new StoryViewHolder(view, this);
     }
 
@@ -82,25 +100,28 @@ public class StoryRecyclerViewAdapter
     @Override
     public void onClick(View itemView) {
         Product clickedItem = (Product) itemView.getTag();
-        try {
-            Context context = ((ContextWrapper) itemView.getContext()).getBaseContext();
+        if (!isShop) {
             showCampaign(clickedItem, (ECartHomeActivity) context, itemView);
-        } catch (Exception ex) {
-            showCampaign(clickedItem, (ECartHomeActivity) itemView.getContext(), itemView);
+        } else {
+            AppConstants.isFromShop = false;
+            Utils.switchFragmentWithAnimation(
+                    R.id.frag_container,
+                    new ProductOverviewFragment(clickedItem.getItemName(),
+                            clickedItem.getSubCategoryName()),
+                    ((ECartHomeActivity) context), null,
+                    Utils.AnimationType.SLIDE_LEFT);
         }
 
 
     }
 
     private void showCampaign(Product storyInfo, ECartHomeActivity mActivity, @Nullable View itemView) {
-
         Bundle bundleParams = new Bundle();
         bundleParams.putSerializable(STORY_LIST_INFO, mList);
         bundleParams.putSerializable(SELECTED_ITEM_INFO, storyInfo);
         Intent intent = new Intent(itemView.getContext(), StoryActivity.class);
         intent.putExtra("data", bundleParams);
         mActivity.startActivityForResult(intent, 1);
-
     }
 }
 

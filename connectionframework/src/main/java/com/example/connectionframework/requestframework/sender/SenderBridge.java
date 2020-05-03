@@ -28,6 +28,9 @@ public class SenderBridge {
         this.context = context;
     }
 
+    public SenderBridge() {
+    }
+
     public List<Object> sendMessage(Request request){
         String jsonFormated = Serializer.toJson(request);
         String jsonResponse = null;
@@ -55,7 +58,7 @@ public class SenderBridge {
     }
 
 
-    private Message returnMessage(String response){
+    public static Message returnMessage(String response) {
         Message message = new Message();
 
         if(response.equals(Constants.Application.CONNECTION_TIMED_OUT_ERROR_MESSAGE)){
@@ -108,6 +111,15 @@ public class SenderBridge {
         Repository.newInstance().setAction(request.getAction());
 
         sendRequest.execute(Serializer.toJson(request));
-
     }
+
+    public void sendMessageAssync(Request request, ReceiverBridgeInterface receiverBridgeInterface) {
+        SendRequest sendRequest = new SendRequest(urlConnection, receiverBridgeInterface);
+
+        Repository.newInstance().setAction(request.getAction());
+
+        sendRequest.execute(Serializer.toJson(request));
+    }
+
+
 }

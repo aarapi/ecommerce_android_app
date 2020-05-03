@@ -32,9 +32,11 @@ public class RequestFunction {
         params.add(categoryName);
         return RequestFunctions.createRequest(CheckSetup.ServerActions.ECOMMERCE_LIST_OF_SHOPS, params);
     }
-    public static Request getSearchedProducts(String searchString){
+
+    public static Request getSearchedProducts(String searchString, String shopName) {
         List<Object> params = new ArrayList<>();
         params.add(searchString);
+        params.add(shopName);
         return RequestFunctions.createRequest(CheckSetup.ServerActions.ECOMMERCE_LIST_OF_SEARCHED_PRODUCTS, params);
     }
     public static Request getProductsOfCategory(String categoryName){
@@ -51,6 +53,13 @@ public class RequestFunction {
         return RequestFunctions.createRequest(CheckSetup.ServerActions.ECOMMERCE_MAKE_AN_ORDER, params);
     }
 
+    public static Request getProductPAgination(String subCategoryName, String shopName) {
+        List<Object> params = new ArrayList<>();
+        params.add(subCategoryName);
+        params.add(shopName);
+
+        return RequestFunctions.createRequest(CheckSetup.ServerActions.ECOMMERCE_PRODUCTS_PAGINATION, params);
+    }
 
 
 }

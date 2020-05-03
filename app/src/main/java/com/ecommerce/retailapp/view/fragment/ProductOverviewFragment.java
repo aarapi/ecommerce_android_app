@@ -45,6 +45,8 @@ public class ProductOverviewFragment extends Fragment {
     private TextDrawable.IBuilder mDrawableBuilder;
     private TextDrawable drawable;
     private ColorGenerator mColorGenerator = ColorGenerator.MATERIAL;
+
+
     private String ImageUrl;
     String categoryName;
 
@@ -69,7 +71,7 @@ public class ProductOverviewFragment extends Fragment {
                     public void onClick(View v) {
 
                         if (CenterRepository.getCenterRepository().getMapOfProductsInCategory() != null) {
-                            SearchProductFragment searchFragment = new SearchProductFragment(getContext(), false);
+                            SearchProductFragment searchFragment = new SearchProductFragment(getContext(), false, shopName);
                             searchFragment.show(getFragmentManager(),
                                     OrderExecuteBootomFragment.TAG);
                         }else{
@@ -78,10 +80,6 @@ public class ProductOverviewFragment extends Fragment {
 
                     }
                 });
-
-
-        getActivity().setTitle("Products");
-
 
         viewPager = (ViewPager) view.findViewById(R.id.htab_viewpager);
         tabLayout = (TabLayout) view.findViewById(R.id.htab_tabs);

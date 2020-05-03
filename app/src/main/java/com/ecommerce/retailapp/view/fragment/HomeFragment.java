@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.ecommerce.retailapp.model.CenterRepository;
+import com.ecommerce.retailapp.model.entities.Product;
+import com.ecommerce.retailapp.model.entities.ShopModel;
 import com.ecommerce.retailapp.view.adapters.StoryRecyclerViewAdapter;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -29,12 +31,13 @@ import com.ecommerce.retailapp.domain.api.ProductCategoryLoaderTask;
 import com.ecommerce.retailapp.view.activities.ECartHomeActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeFragment extends Fragment {
     int mutedColor = R.attr.colorPrimary;
     private RecyclerView recyclerView;
     private ShimmerFrameLayout mShimmerViewContainer;
-    StoryRecyclerViewAdapter mStoryRVAdapter = new StoryRecyclerViewAdapter();
+    StoryRecyclerViewAdapter mStoryRVAdapter = new StoryRecyclerViewAdapter(true, getContext());
     private RecyclerView rv_stories;
     /**
      * The double back to exit pressed once.
@@ -63,7 +66,7 @@ public class HomeFragment extends Fragment {
                     public void onClick(View v) {
 
                         if (CenterRepository.getCenterRepository().getListOfShop() != null) {
-                            searchFragment = new SearchProductFragment(getContext(), true);
+                            searchFragment = new SearchProductFragment(getContext(), true, null);
                             searchFragment.show(getFragmentManager(),
                                     OrderExecuteBootomFragment.TAG);
                         }else{
@@ -168,17 +171,27 @@ public class HomeFragment extends Fragment {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 
-        storyList();
-        mStoryRVAdapter.setList(CenterRepository.getCenterRepository().getAdsProducts());
+        mStoryRVAdapter.setList(storyList());
         rv_stories.setLayoutManager(layoutManager);
         rv_stories.setAdapter(mStoryRVAdapter);
         mStoryRVAdapter.notifyDataSetChanged();
     }
 
-    private void storyList() {
-        int size = CenterRepository.getCenterRepository().getAdsProducts().size();
+    private ArrayList<Product> storyList() {
+        ArrayList<ShopModel> shopModels = CenterRepository.getCenterRepository().getListOfShop();
+        int size = shopModels.size();
+        ArrayList<Product> products = new ArrayList<>();
+
         for (int i =0; i<size; i++){
-            CenterRepository.getCenterRepository().getAdsProducts().get(i).setProductId(i + "");
+            Product product = new Product();
+            product.setProductId(i + "");
+            product.setImageURL(shopModels.get(i).getShopImage());
+            product.setItemName(shopModels.get(i).getShopName());
+            product.setSubCategoryName(shopModels.get(i).getCategoryName());
+
+            products.add(product);
         }
+
+        return products;
     }
 }

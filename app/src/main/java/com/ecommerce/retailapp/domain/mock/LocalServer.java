@@ -78,10 +78,8 @@ public class LocalServer {
             CenterRepository.getCenterRepository().setListOfShop(shopList);
 
             ArrayList<Product> storyProductList = gson.fromJson(gson.toJson(data.get(2)), founderStoryProducts);
-            ArrayList<Product> adsProducts = gson.fromJson(gson.toJson(data.get(3)), founderStoryProducts);
 
             CenterRepository.getCenterRepository().setListOfStoryProducts(storyProductList);
-            CenterRepository.getCenterRepository().setAdsProducts(adsProducts);
 
         }else
             CenterRepository.getCenterRepository().setListOfCategory(null);

@@ -10,6 +10,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:shimmer="http://schemas.android.com/tools"
     android:layout_gravity="clip_horizontal"
     android:gravity="center_horizontal"
     android:orientation="vertical">
@@ -56,11 +57,25 @@
             />
     </RelativeLayout>
 
+    <ProgressBar
+        android:id="@+id/progress"
+        style="@style/CustomProgressBar"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/search_root"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:visibility="gone"></ProgressBar>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/product_list_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/search_root"/>
+        android:layout_below="@+id/progress"
+
+        />
+
     <com.wang.avi.AVLoadingIndicatorView
         android:id="@+id/loading_bar"
         android:layout_width="50dp"

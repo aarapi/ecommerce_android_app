@@ -485,7 +485,6 @@ public class ECartHomeActivity extends AppCompatActivity implements ReceiverActi
         }
 
 
-
     }
 
     @Override

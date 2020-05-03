@@ -24,11 +24,13 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ecommerce.retailapp.R;
 import com.ecommerce.retailapp.domain.api.ProductLoaderTask;
+import com.ecommerce.retailapp.domain.mock.RequestFunction;
 import com.ecommerce.retailapp.model.CenterRepository;
 import com.ecommerce.retailapp.model.entities.Product;
 import com.ecommerce.retailapp.model.entities.ShopModel;
@@ -37,15 +39,25 @@ import com.ecommerce.retailapp.utils.Utils;
 import com.ecommerce.retailapp.view.activities.ECartHomeActivity;
 import com.ecommerce.retailapp.view.adapters.ProductListAdapter;
 import com.ecommerce.retailapp.view.adapters.ShopListAdapterSearch;
+import com.example.connectionframework.requestframework.constants.MessagingFrameworkConstant;
+import com.example.connectionframework.requestframework.receiver.ReceiverBridgeInterface;
+import com.example.connectionframework.requestframework.sender.Message;
 import com.example.connectionframework.requestframework.sender.Repository;
+import com.example.connectionframework.requestframework.sender.SenderBridge;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.wang.avi.AVLoadingIndicatorView;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class SearchProductFragment extends BottomSheetDialogFragment implements TextWatcher {
+import static com.example.connectionframework.requestframework.sender.SenderBridge.returnMessage;
+
+public class SearchProductFragment extends BottomSheetDialogFragment implements TextWatcher, ReceiverBridgeInterface {
 
     private static final int REQ_SCAN_RESULT = 200;
     private final int REQ_CODE_SPEECH_INPUT = 100;
@@ -58,15 +70,19 @@ public class SearchProductFragment extends BottomSheetDialogFragment implements 
     private RelativeLayout rl_error_server;
     private TextView tv_error_message, tv_cancel;
     private boolean isHome;
-    private SearchProductFragment searchProductFragment;
+
+    private String shopName;
+
+    private ProgressBar progressBar;
+
 
 
     private View rootView;
 
-    public  SearchProductFragment (Context context, boolean isHome) {
-        searchProductFragment = this;
+    public SearchProductFragment(Context context, boolean isHome, String shopName) {
         this.isHome = isHome;
         this.context = context;
+        this.shopName = shopName;
     }
 
     @Override
@@ -82,9 +98,11 @@ public class SearchProductFragment extends BottomSheetDialogFragment implements 
         tv_cancel = (TextView) rootView.findViewById(R.id.tv_cancel);
 
         loading_bar = rootView.findViewById(R.id.loading_bar);
+        progressBar = rootView.findViewById(R.id.progress);
 
         serchInput = (EditText) rootView.findViewById(R.id.edt_search_input);
         serchInput.addTextChangedListener(this);
+
 
         serchInput.setSelected(true);
 
@@ -130,7 +148,7 @@ public class SearchProductFragment extends BottomSheetDialogFragment implements 
 
                 @Override
                 public void onItemClick(View view, int position) {
-
+                    AppConstants.isFromShop = false;
                     Utils.switchFragmentWithAnimation(
                             R.id.frag_container,
                             new ProductOverviewFragment( CenterRepository.getCenterRepository()
@@ -149,7 +167,7 @@ public class SearchProductFragment extends BottomSheetDialogFragment implements 
     }
     private void setSearchedShop(String searchString){
         if (searchString == null) {
-           CenterRepository.getCenterRepository().setListOfSearchedShops(CenterRepository.getCenterRepository().getListOfShop());
+            CenterRepository.getCenterRepository().setListOfSearchedShops(CenterRepository.getCenterRepository().getListOfShop());
         }else {
             ArrayList<ShopModel> searchedProducts = new ArrayList<>();
             ArrayList<ShopModel> shopModels = CenterRepository.getCenterRepository().getListOfShop();
@@ -190,34 +208,23 @@ public class SearchProductFragment extends BottomSheetDialogFragment implements 
         Set<String> keySet = CenterRepository.getCenterRepository().getMapOfProductsInCategory().keySet();
         if (searchString == null) {
             for (String string : keySet) {
-                CenterRepository.getCenterRepository().setListOfSearchedProducts(CenterRepository.getCenterRepository().getMapOfProductsInCategory().get(string));
+                CenterRepository.getCenterRepository().setListOfSearchedProducts(
+                        CenterRepository.getCenterRepository().getMapOfProductsInCategory().get(string));
                 break;
             }
         }else {
-            List<Product> searchedProducts = new ArrayList<>();
-
-            for (String string : keySet) {
-                ArrayList<Product> products = CenterRepository.getCenterRepository().getMapOfProductsInCategory().get(string);
-                int sizeProducts = products.size();
-                for (int j =0; j<sizeProducts;j++){
-                    if (isHome){
-                        if (products.get(j).getItemName().toLowerCase().contains(searchString.toLowerCase())){
-                            searchedProducts.add(products.get(j));
-                        }
-                    }else {
-                        if (products.get(j).getItemName().toLowerCase().contains(searchString.toLowerCase())
-                                && products.get(j).getShopName().equals(CenterRepository.getCenterRepository()
-                                .getShopsOfCategory().get(AppConstants.CURRENT_SHOP).getShopName())){
-                            searchedProducts.add(products.get(j));
-                        }
-                    }
-                }
-            }
-            CenterRepository.getCenterRepository().setListOfSearchedProducts(searchedProducts);
+            progressBar.setVisibility(View.VISIBLE);
+            SenderBridge senderBridge = new SenderBridge();
+            senderBridge.sendMessageAssync(RequestFunction.getSearchedProducts(searchString, shopName), this);
 
         }
 
     }
+
+
+
+
+
 
     @Override
     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -232,6 +239,7 @@ public class SearchProductFragment extends BottomSheetDialogFragment implements 
         }else {
             setSearchProductList(charSequence.toString());
             getSearchedProducts();
+
         }
     }
 
@@ -248,4 +256,31 @@ public class SearchProductFragment extends BottomSheetDialogFragment implements 
     }
 
 
+    @Override
+    public void onDataReceive(String jsonrRsponse) {
+        final Message message = returnMessage(jsonrRsponse);
+        if (message.getStatusCode() == MessagingFrameworkConstant.STATUS_CODES.Success) {
+            Gson gson = new Gson();
+            Type founderProductsType = new TypeToken<ArrayList<Product>>() {
+            }.getType();
+
+            ArrayList<Product> products = gson.fromJson(gson.toJson(message.getData().get(0)),
+                    founderProductsType);
+
+            CenterRepository.getCenterRepository().setListOfSearchedProducts(products);
+        }
+
+
+        ((ECartHomeActivity) getContext()).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.GONE);
+                if (message.getStatusCode() == MessagingFrameworkConstant.STATUS_CODES.Success) {
+                    getSearchedProducts();
+                }
+            }
+        });
+
+
+    }
 }
