@@ -42,15 +42,19 @@
                 app:layout_scrollFlags="scroll|enterAlways|snap"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-                <ImageView
-                    android:id="@+id/search_item"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/fab_margin"
+                <RelativeLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:clickable="true"
-                    android:layout_gravity="end"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:src="@drawable/ic_search_white" />
+                    android:layout_gravity="end">
+
+                    <ImageView
+                        android:id="@+id/search_item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_search_white"
+                        android:layout_centerInParent="true" />
+                </RelativeLayout>
             </androidx.appcompat.widget.Toolbar>
 
             <com.google.android.material.tabs.TabLayout

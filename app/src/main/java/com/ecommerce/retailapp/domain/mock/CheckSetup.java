@@ -21,6 +21,7 @@ public class CheckSetup {
         public static final int ECOMMERCE_LIST_OF_SHOPS = 3;
         public static final int ECOMMERCE_LIST_OF_SEARCHED_PRODUCTS = 4;
         public static final int ECOMMERCE_PRODUCTS_OFFLINE = 5;
+        public static final int ECOMMERCE_PRODUCTS_PAGINATION = 6;
 
     }
 
