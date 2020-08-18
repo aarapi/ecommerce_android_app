@@ -62,6 +62,80 @@
                 android:layout_height="match_parent"
                 android:layout_below="@+id/slide_down" />
 
+            <ProgressBar
+                android:id="@+id/progress"
+                style="@style/CustomProgressBar"
+                android:layout_gravity="center"
+                android:layout_marginBottom="50dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:visibility="gone"></ProgressBar>
+
+            <RelativeLayout
+                android:id="@+id/rl_error_server"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="200dp"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_centerInParent="true">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_search_oops"
+                        android:layout_gravity="center_horizontal"></ImageView>
+
+                    <TextView
+                        android:id="@+id/tv_oops"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="Oops!"
+                        android:textStyle="bold"
+                        android:layout_gravity="center_horizontal"
+                        android:textSize="25sp"
+                        android:layout_marginTop="10dp"></TextView>
+
+                    <TextView
+                        android:id="@+id/tv_error_message"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+
+                        android:text="Connection timeout, try again"></TextView>
+
+                    <LinearLayout
+                        android:id="@+id/ll_retry"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="20dp"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/ic_refresh"></ImageView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="5dp"
+                            android:textSize="15sp"
+                            android:text="Retry"></TextView>
+                    </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
+
             <FrameLayout
                 android:id="@+id/default_nodata"
                 android:layout_width="match_parent"

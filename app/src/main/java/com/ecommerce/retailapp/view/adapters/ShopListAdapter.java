@@ -145,7 +145,7 @@ public class  ShopListAdapter extends
         TextView itemName, itemDesc, itemCost, availability, quanitity,
                 addItem, removeItem, tv_time;
         ImageView imagView;
-        StoryRecyclerViewAdapter mStoryRVAdapter = new StoryRecyclerViewAdapter();
+        StoryRecyclerViewAdapter mStoryRVAdapter = new StoryRecyclerViewAdapter(false, context);
         private RecyclerView rv_stories;
 
 

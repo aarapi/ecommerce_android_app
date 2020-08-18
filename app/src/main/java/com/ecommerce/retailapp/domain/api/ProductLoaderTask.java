@@ -107,7 +107,7 @@ public class ProductLoaderTask extends AsyncTask<String, Void, Void> {
 
         for (String string : keys) {
 
-            adapter.addFrag(new ProductListFragment(string), string);
+            adapter.addFrag(new ProductListFragment(string, shopName), string);
 
         }
 

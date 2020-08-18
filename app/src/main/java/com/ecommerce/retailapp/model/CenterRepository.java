@@ -30,7 +30,6 @@ public class CenterRepository {
     private List<Product> listOfProductsInShoppingList = Collections.synchronizedList(new ArrayList<Product>());
     private ArrayList<ShopModel> listOfShop = new ArrayList<>();
     private ArrayList<Product> listOfStoryProducts = new ArrayList<>();
-    private ArrayList<Product> adsProducts = new ArrayList<>();
     private ArrayList<ShopModel> listOfSearchedShops = new ArrayList<>();
     private ArrayList<ShopModel> shopsOfCategory = new ArrayList<>();
     private List<Product> listOfSearchedProducts = new ArrayList<>();
@@ -127,11 +126,4 @@ public class CenterRepository {
         this.listOfStoryProducts = listOfStoryProducts;
     }
 
-    public ArrayList<Product> getAdsProducts() {
-        return adsProducts;
-    }
-
-    public void setAdsProducts(ArrayList<Product> adsProducts) {
-        this.adsProducts = adsProducts;
-    }
 }

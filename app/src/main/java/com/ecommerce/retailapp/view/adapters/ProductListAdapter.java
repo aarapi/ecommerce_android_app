@@ -25,6 +25,7 @@ import android.widget.TextView.BufferType;
 
 import com.bumptech.glide.Glide;
 import com.ecommerce.retailapp.R;
+import com.ecommerce.retailapp.domain.mock.RequestFunction;
 import com.ecommerce.retailapp.model.CenterRepository;
 import com.ecommerce.retailapp.model.entities.Money;
 import com.ecommerce.retailapp.model.entities.Product;
@@ -33,6 +34,7 @@ import com.ecommerce.retailapp.utils.Utils;
 import com.ecommerce.retailapp.view.activities.ECartHomeActivity;
 import com.ecommerce.retailapp.view.customview.TextDrawable;
 import com.ecommerce.retailapp.view.customview.TextDrawable.IBuilder;
+import com.example.connectionframework.requestframework.sender.SenderBridge;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -69,8 +71,6 @@ public class ProductListAdapter extends
 
         } else {
 
-            productList = CenterRepository.getCenterRepository().getMapOfProductsInCategory()
-                    .get(subcategoryKey);
         }
 
         this.context = context;
@@ -360,4 +360,7 @@ public class ProductListAdapter extends
         }
     }
 
+    public void setProductList(List<Product> productList) {
+        this.productList = productList;
+    }
 }
