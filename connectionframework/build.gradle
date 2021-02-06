@@ -24,7 +24,7 @@ android {
     productFlavors {
         DEV {
             dimension "api"
-            buildConfigField("String", "HOST_URL", '"http://108.61.170.39:8081/taboo_api/annoyingProjectsGateway/generics"')
+            buildConfigField("String", "HOST_URL", '"http://192.168.43.90:8089/annoyingProjectsGateway/generics"')
         }
 
 
